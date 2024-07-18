@@ -87,6 +87,9 @@ const SingleHotel = () => {
                                             }
                                         </div>
                                     </div>
+
+
+                                    
                                     <div className="col-span-2">
                                         <div className="w-full flex mt-5 gap-4">
                                             <button className="border border-primary text-primary bg-white rounded-full px-5 py-2">SELECT ROOMS</button>
