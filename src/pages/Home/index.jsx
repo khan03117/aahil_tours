@@ -7,12 +7,16 @@ import FromField from "./FromField"
 import LabelSearch from "./LabelSearch"
 
 const Home = () => {
-    const[quota,setQuota] = useState('')
-    const checkinquota = (itm)=>{
-         setQuota(itm)
+    const [btn,setBtn] = useState('')
+    const [quota, setQuota] = useState('')
+    const checkinquota = (itm) => {
+        setQuota(itm)
     }
-    
-    
+    const checkin = (itm) =>{
+        setBtn(itm) 
+    }
+
+
     return (
         <>
             <section className="bg-primary p-10">
@@ -20,9 +24,13 @@ const Home = () => {
                     <div className="grid grid-cols-1">
                         <div className="col-span-1">
                             <div className="w-full mb-3">
-                                <button className="text-sm text-gray-300 font-bold px-4 py-2">One Way</button>
-                                <button className="text-sm text-gray-300 font-bold px-4 py-2">Round Trip</button>
-                                <button className="text-sm text-gray-300 font-bold px-4 py-2">Multicity</button>
+                                {
+                                    ["One Way", "Round Trip", "Multicity"].map((itm) => (
+                                        <>
+                                            <button onClick={() => checkin(itm)} className={`text-sm text-gray-300 font-bold px-4 py-1 ${btn == itm ?"bg-white text-primary rounded-full":""}`}>{itm}</button>
+                                        </>
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>
@@ -55,21 +63,21 @@ const Home = () => {
 
                     </div>
                     <div className="grid grid-cols-1">
-                        
+
                         <div className="col-span-1">
                             <div className="w-full flex flex-wrap gap-4 mt-5">
                                 {
                                     ["Defence Force", "Students", "Senior Citizens", "Doctor Nurses"].map((itm) => (
                                         <>
-                                            <div onClick={()=> checkinquota(itm)} className={`inline-flex gap-1 cursor-pointer ${quota == itm ? "active": ""} quotabox`}>
-                                                <div className={`size-4 rounded-full border checkbox relative ${quota == itm ? "bg-white": ""} quotabox`}> </div>
+                                            <div onClick={() => checkinquota(itm)} className={`inline-flex gap-1 cursor-pointer ${quota == itm ? "active" : ""} quotabox`}>
+                                                <div className={`size-4 rounded-full border checkbox relative ${quota == itm ? "bg-white" : ""} quotabox`}> </div>
                                                 <span className="text-sm text-white">{itm}</span>
                                             </div>
                                         </>
                                     ))
                                 }
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </section>
