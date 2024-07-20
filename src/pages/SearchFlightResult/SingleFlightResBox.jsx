@@ -2,14 +2,32 @@
 import food from '../../assets/fast-food.svg'
 import vistara from '../../assets/vistara.png'
 import seat from '../../assets/airplane-seat.svg'
+import { CloseOutlined } from '@ant-design/icons'
+import FlightDetails from './FlightDetails'
+import FareDetails from './FareDetails'
+import BaggageInformation from './BaggageInformation'
+import { useState } from 'react'
+
+// import PropTypes from 'prop-types';
 
 const SingleFlightResBox = () => {
+    const [view, setView] = useState('');
+    const [show, setShow] = useState(false);
+    const viewDetails = (itm) => {
+        setView(itm)
+    }
+    const handleshow = () => {
+        setShow(!show);
+        setView('Flight Details')
+
+    }
+
     return (
         <>
-            <div className="w-full bg-white rounded-lg  p-5 my-3">
+            <div className="w-full bg-white rounded-lg  p-5 my-3 relative">
                 <div className="w-full">
                     <div className="col-span-1">
-                        <div className="w-full ">
+                        <div className="w-full py-2">
                             <div className="w-full flex items-center gap-2 px-2">
                                 <img src={food} alt='image' className='h-[20px]' />
                                 <p className="text-black text-sm font-semibold">Enjoy Free Meals</p>
@@ -27,6 +45,7 @@ const SingleFlightResBox = () => {
                                         <p className='text-sm text-black font-light'>Vistara</p>
                                         <p className='text-sm text-gray-400 font-light'>UK-929</p>
                                     </div>
+
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -64,22 +83,76 @@ const SingleFlightResBox = () => {
                         </div>
                     </div>
                     <div className="col-span-1">
-                        <div className="w-full">
-                            <p className='bg-yellow-50 inline-block border-l-2 border-yellow-800'>Use Promo Code: EMTSENIOR to get additional Rs.400 instant discount </p>
+                        <div className="w-full py-2">
+                            <button onClick={handleshow} className={`font-bold text-sm  hover:bg-primary hover:text-white px-4 py-1 rounded ${show ? "bg-primary text-white" : "text-black bg-gray-200"}`}>View Details </button>
                         </div>
                     </div>
                     <div className="col-span-1">
-                        <div className="w-full bg-blue-gray-50">
-                            <div className="w-full py-2 gap-3 flex">
-                                <button className='text-primary'>Flight Detail</button>
-                                <button className='rounded-full bg-yellow-50 border border-yellow-400 px-4 py-1 text-xs font-semibold'>Senior Citizens Fare</button>
-                            </div>
+                        <div className="w-full py-2">
+                            <p className='bg-yellow-50 inline-block border-l-2 border-yellow-800'>Use Promo Code: EMTSENIOR to get additional Rs.400 instant discount </p>
                         </div>
                     </div>
+
                 </div>
+                {
+                    show && (
+                        <>
+                            <div className="relative w-full p-2 bg-gray-100 mt-3">
+                                <div className="grid grid-cols-1">
+                                    <div className="col-span-1">
+                                        <div className=" grid grid-cols-1 justify-between">
+                                            <div className="col-span-1">
+                                                <div className="w-full flex border-b border-gray-400">
+                                                    <div className="w-full">
+                                                        {
+                                                            ["Flight Details", "Fare Details", "Fare Rules", "Baggage Information"].map((itm) => (
+                                                                <>
+                                                                    <button onClick={() => viewDetails(itm)} className={`text-black text-sm font-bold px-4 py-2 ${view == itm ? "text-primary" : ""}`}>{itm}</button>
+                                                                </>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                    <button className="text-gray-700" onClick={handleshow}>
+                                                        <CloseOutlined />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {
+                                                view == "Flight Details" && (
+                                                    <>
+                                                        <FlightDetails />
+                                                    </>
+                                                )
+                                            }
+                                            {
+                                                view == "Fare Details" && (
+                                                    <>
+                                                        <FareDetails />
+                                                    </>
+                                                )
+                                            }
+                                            {
+                                                view == "Baggage Information" && (
+                                                    <>
+                                                        <BaggageInformation />
+                                                    </>
+                                                )
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )
+                }
             </div>
         </>
     )
 }
+
+
+
 
 export default SingleFlightResBox
