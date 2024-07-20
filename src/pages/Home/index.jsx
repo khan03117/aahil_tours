@@ -8,6 +8,7 @@ import LabelSearch from "./LabelSearch"
 import { CloseCircleFilled, PlusOutlined } from "@ant-design/icons"
 
 const Home = () => {
+    const [open, setOpen] = useState({id : 0, type : ""})
     const [trip, setTrip] = useState(1)
     const [quota, setQuota] = useState('');
     const [rows, setRows] = useState(1);
@@ -16,6 +17,9 @@ const Home = () => {
         { id: 2, trip: "Round Trip" },
         { id: 3, trip: "Mulicity" }
     ];
+    const handleopen = (index, type) => {
+        setOpen({id : index, type : type});
+    }
     const checkinquota = (itm) => {
         setQuota(itm);
     }
@@ -29,10 +33,12 @@ const Home = () => {
     }
 
     const addcity = () => {
-        setRows((prev) => (prev + 1))
+        setRows((prev) => (prev + 1));
+        setOpen({id : "", type : ""})
     }
     const removecity = () => {
-        setRows((prev) => Math.max(prev -1 , 1))
+        setRows((prev) => Math.max(prev - 1, 1));
+        setOpen({id : "", type : ""})
     }
 
     return (
@@ -57,13 +63,13 @@ const Home = () => {
                             <>
                                 <div key={a} className="grid border-b border-blue-gray-100 last:border-none grid-cols-8  *:border-e *:border-blue-gray-100">
                                     <div className="col-span-2 rounded-s">
-                                        <FromField label="From" />
+                                        <FromField id={index} handleopen={handleopen} open={open} label="From" />
                                     </div>
                                     <div className="col-span-2">
-                                        <FromField label="To" />
+                                        <FromField id={index} handleopen={handleopen} open={open} label="To" />
                                     </div>
                                     <div className="col-span-1">
-                                        <DateField handletrip={handletrip} disabled={false} label={"Departure Date"} />
+                                        <DateField id={index} handletrip={handletrip} disabled={false} label={"Departure Date"} />
                                     </div>
                                     {
                                         trip != 3 && (
@@ -97,19 +103,19 @@ const Home = () => {
                                                 <div className={`w-full h-full ${trip != 3 ? '' : 'p-3 flex gap-2 items-center'}`}>
                                                     <button className={`px-7 text-sm ${trip != 3 ? 'h-full w-full rounded-e' : 'py-2 rounded-full'}   bg-orange-900 text-white outline-none`}>Search</button>
                                                     <button onClick={addcity} className="text-primary px-4 py-2 text-sm border border-primary rounded-full">
-                                                        <PlusOutlined/> Add City
+                                                        <PlusOutlined /> Add City
                                                     </button>
                                                     {
                                                         index > 1 && (
                                                             <>
                                                                 <button onClick={removecity} className=" text-xl text-gray-800">
-                                                        <CloseCircleFilled/>
-                                                    </button>
+                                                                    <CloseCircleFilled />
+                                                                </button>
                                                             </>
                                                         )
                                                     }
-                                                
-                                                 
+
+
                                                 </div>
 
                                             </> : <>
@@ -117,7 +123,7 @@ const Home = () => {
                                             </>
                                         }
                                     </div>
-                                  
+
 
                                 </div>
                             </>
