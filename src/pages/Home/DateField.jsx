@@ -1,8 +1,15 @@
-// import React from 'react'
+import React from 'react'
 import PropTypes from 'prop-types';
 import LabelSearch from './LabelSearch';
 import { CloseOutlined } from '@ant-design/icons';
-const DateField = ({ label, disabled, handletrip }) => {
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+const DateField = ({ label, disabled, handletrip, handleFdata, id }) => {
+  const [startDate, setStartDate] = React.useState(new Date());
+  const handleDate = (date) => {
+    setStartDate(date);
+    handleFdata(id, label, date);
+  }
   return (
     <>
       <div className="w-full bg-white h-full p-3 relative">
@@ -17,7 +24,8 @@ const DateField = ({ label, disabled, handletrip }) => {
               </>
             )
           }
-          <input type="date" disabled={disabled} className="w-full z-40 date-input absolute top-0 p-2 outline-none start-0 h-full bg-transparent" />
+          <DatePicker minDate={new Date()}  className='w-full z-40 date-input  top-0 p-2  start-0 h-full' selected={startDate} monthsShown={2} onChange={(date) => handleDate(date)} />
+          {/* <input type="date" disabled={disabled} onChange={(e) => handleFdata(id, label, e.target.value)} className="w-full z-40 date-input absolute top-0 p-2 outline-none start-0 h-full bg-transparent" /> */}
         </div>
       </div>
     </>
@@ -26,7 +34,9 @@ const DateField = ({ label, disabled, handletrip }) => {
 DateField.propTypes = {
   label: PropTypes.string,
   disabled: PropTypes.bool,
-  handletrip: PropTypes.func
+  handletrip: PropTypes.func,
+  handleFdata: PropTypes.func,
+  id: PropTypes.string
 }
 
 export default DateField

@@ -22,3 +22,11 @@ input[type="date"]::placeholder {
   font-weight: 800;
   position: absolute;
 }
+.react-datepicker[role="dialog"] {
+  display: flex;
+}
+.react-datepicker__day-name, .react-datepicker__day, .react-datepicker__time-name{
+  width: 2rem !important;
+  height: 2rem !important;
+  line-height: 2rem !important;
+}

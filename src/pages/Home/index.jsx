@@ -1,24 +1,35 @@
 // import React from 'react'
 
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DateField from "./DateField"
 import FromField from "./FromField"
 import LabelSearch from "./LabelSearch"
 import { CloseCircleFilled, PlusOutlined } from "@ant-design/icons"
 
 const Home = () => {
-    const [open, setOpen] = useState({id : 0, type : ""})
+    const [open, setOpen] = useState({ id: 0, type: "" })
     const [trip, setTrip] = useState(1)
     const [quota, setQuota] = useState('');
     const [rows, setRows] = useState(1);
+    const [fdata, setFdata] = useState([]);
     const trips = [
         { id: 1, trip: "One Way" },
         { id: 2, trip: "Round Trip" },
         { id: 3, trip: "Mulicity" }
     ];
+    const handleFdata = (index, key, value) => {
+        let temp = [...fdata];
+        const found = temp.find(obj => obj.id == index);
+        if (found) {
+            found[key] = value;
+        } else {
+            temp.push({ id: index, [key]: value });
+        }
+        setFdata(temp);
+    }
     const handleopen = (index, type) => {
-        setOpen({id : index, type : type});
+        setOpen({ id: index, type: type });
     }
     const checkinquota = (itm) => {
         setQuota(itm);
@@ -34,13 +45,15 @@ const Home = () => {
 
     const addcity = () => {
         setRows((prev) => (prev + 1));
-        setOpen({id : "", type : ""})
+        setOpen({ id: "", type: "" })
     }
     const removecity = () => {
         setRows((prev) => Math.max(prev - 1, 1));
-        setOpen({id : "", type : ""})
+        setOpen({ id: "", type: "" })
     }
-
+    useEffect(() => {
+        console.log(fdata)
+    }, [fdata])
     return (
         <>
             <section className="bg-primary p-10">
@@ -63,19 +76,19 @@ const Home = () => {
                             <>
                                 <div key={a} className="grid border-b border-blue-gray-100 last:border-none grid-cols-8  *:border-e *:border-blue-gray-100">
                                     <div className="col-span-2 rounded-s">
-                                        <FromField id={index} handleopen={handleopen} open={open} label="From" />
+                                        <FromField handleFdata={handleFdata} id={index} handleopen={handleopen} open={open} label="From" />
                                     </div>
                                     <div className="col-span-2">
-                                        <FromField id={index} handleopen={handleopen} open={open} label="To" />
+                                        <FromField handleFdata={handleFdata} id={index} handleopen={handleopen} open={open} label="To" />
                                     </div>
                                     <div className="col-span-1">
-                                        <DateField id={index} handletrip={handletrip} disabled={false} label={"Departure Date"} />
+                                        <DateField handleFdata={handleFdata} id={index} handletrip={handletrip} disabled={false} label={"Departure Date"} />
                                     </div>
                                     {
                                         trip != 3 && (
                                             <>
                                                 <div className="col-span-1">
-                                                    <DateField handletrip={handletrip} label={"Return Date"} disabled={trip == 2 ? false : true} />
+                                                    <DateField id={index} handleFdata={handleFdata} handletrip={handletrip} label={"Return Date"} disabled={trip == 2 ? false : true} />
                                                 </div>
                                             </>
                                         )

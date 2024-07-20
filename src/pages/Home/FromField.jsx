@@ -1,7 +1,7 @@
 // import React from 'react'
 import PropTypes from 'prop-types';
 import LabelSearch from './LabelSearch';
-const FromField = ({ label, handleopen, open, id }) => {
+const FromField = ({ label, handleopen, open, id, handleFdata }) => {
   return (
     <div onClick={() => handleopen(id, label)} className="w-full  p-3 cursor-pointer relative bg-white">
       <LabelSearch label={label} />
@@ -21,7 +21,7 @@ const FromField = ({ label, handleopen, open, id }) => {
               <div className="w-full">
                 <ul className='*:p-1 *:text-sm'>
                   <li>
-                    <button className="w-full text-start">Delhi (Indira gandhi airport)</button>
+                    <button onClick={() => handleFdata(id, label, 'Del')} className="w-full text-start">Delhi (Indira gandhi airport)</button>
                   </li>
                   <li>
                     <button className="w-full text-start">Delhi (Indira gandhi airport)</button>
@@ -46,7 +46,8 @@ FromField.propTypes = {
   label: PropTypes.string.isRequired,
   handleopen: PropTypes.func,
   open: PropTypes.string,
-  id : PropTypes.string
+  id : PropTypes.string,
+  handleFdata : PropTypes.func
 };
 
 
