@@ -1,23 +1,84 @@
-// import React from 'react'
-
-
+import React from 'react'
 import { useEffect, useState } from "react"
 import DateField from "./DateField"
 import FromField from "./FromField"
 import LabelSearch from "./LabelSearch"
-import { CloseCircleFilled, PlusOutlined } from "@ant-design/icons"
+import { CloseCircleFilled, DownOutlined, PlusOutlined } from "@ant-design/icons"
+import TravellersBox from "./TravellersBox"
+import { pfts, trips } from '../../Utils'
 
 const Home = () => {
+    const [travellers, setTravellers] = useState({
+        ADULT: 1,
+        CHILD: 0,
+        INFANT: 0,
+    });
+    const boxRef = React.useRef(null);
+    const [cabinClass, setCabinClass] = useState('ECONOMY');
+    const handleCabinClass = (key) => {
+        setCabinClass(key);
+    };
+    const handleIncrement = (key) => {
+        setTravellers((prev) => {
+            const newValue = prev[key] + 1;
+
+            if (key === 'INFANT' && newValue > prev['ADULT']) {
+                // Infants cannot be more than adults
+                return prev;
+            }
+
+            if ((key === 'ADULT' || key === 'CHILD') && (newValue + prev[key === 'ADULT' ? 'CHILD' : 'ADULT']) > 9) {
+                // Total number of adults + children cannot be more than 9
+                return prev;
+            }
+
+            return { ...prev, [key]: newValue };
+        });
+    };
+    const handleDecrement = (key) => {
+        setTravellers((prev) => {
+          if (key === 'ADULT' && prev[key] <= 1) {
+            // Ensure the number of adults cannot be less than 1
+            return prev;
+          }
+    
+          let newValue = prev[key] > 0 ? prev[key] - 1 : 0;
+          let newTravellers = { ...prev, [key]: newValue };
+    
+          if (key === 'ADULT' && newTravellers['INFANT'] > newValue) {
+            newTravellers['INFANT'] = newValue;
+          }
+    
+          return newTravellers;
+        });
+      };
+
     const [open, setOpen] = useState({ id: 0, type: "" })
     const [trip, setTrip] = useState(1)
     const [quota, setQuota] = useState('');
     const [rows, setRows] = useState(1);
     const [fdata, setFdata] = useState([]);
-    const trips = [
-        { id: 1, trip: "One Way" },
-        { id: 2, trip: "Round Trip" },
-        { id: 3, trip: "Mulicity" }
-    ];
+    const [tbox, setTbox] = useState(false);
+    const handleTravellerBox = () => {
+        setTbox(true);
+    }
+    const handleClickOutside = (event) => {
+        if (boxRef.current && !boxRef.current.contains(event.target)) {
+            setTbox(false);
+        }
+    };
+
+    useEffect(() => {
+        if (tbox) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [tbox]);
     const handleFdata = (index, key, value) => {
         let temp = [...fdata];
         const found = temp.find(obj => obj.id == index);
@@ -32,7 +93,7 @@ const Home = () => {
         setOpen({ id: index, type: type });
     }
     const checkinquota = (itm) => {
-        setQuota(itm);
+        setQuota((prev) => (prev != itm ? itm : ""));
     }
     const handletrip = (itm) => {
         setTrip(itm)
@@ -53,7 +114,8 @@ const Home = () => {
     }
     useEffect(() => {
         console.log(fdata)
-    }, [fdata])
+    }, [fdata]);
+
     return (
         <>
             <section className="bg-primary p-10">
@@ -97,13 +159,31 @@ const Home = () => {
                                         index == 0 && (
                                             <>
                                                 <div className="col-span-1 border-none">
-                                                    <div className="w-full p-3 bg-white h-full">
+                                                    <div onClick={handleTravellerBox} className="w-full p-3 bg-white h-full relative">
                                                         <LabelSearch label={"Traveller & Class"} />
                                                         <h4>
-                                                            <span className="text-xl font-bold me-1">1</span>
-                                                            <span className="text-sm me-1">July</span>
-                                                            <span>2024</span>
+                                                            <span className="text-xl font-bold me-1">{travellers.ADULT + travellers.CHILD + travellers.INFANT}</span>
+                                                            <span className="text-sm me-1">Traveller(s)</span>
+                                                            <span><DownOutlined/></span>
                                                         </h4>
+                                                        <p className="text-sm capitalize">{cabinClass.split('_').join(' ').toLowerCase()}</p>
+                                                        {
+                                                            tbox && (
+                                                                <>
+                                                                    <div ref={boxRef} className="absolute top-full start-0 w-full min-w-[250px]">
+                                                                        <TravellersBox 
+                                                                        travellers={travellers}
+                                                                         handleIncrement={handleIncrement} 
+                                                                         handleDecrement={handleDecrement}
+                                                                          handleCabinClass={handleCabinClass} 
+                                                                          cabinClass={cabinClass} 
+                                                                          c_bin={cabinClass}
+                                                                           />
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        }
+
                                                     </div>
                                                 </div>
                                             </>
@@ -147,11 +227,11 @@ const Home = () => {
                         <div className="col-span-1">
                             <div className="w-full flex flex-wrap gap-4 mt-5">
                                 {
-                                    ["Defence Force", "Students", "Senior Citizens", "Doctor Nurses"].map((itm) => (
+                                    pfts.map((itm) => (
                                         <>
-                                            <div onClick={() => checkinquota(itm)} className={`inline-flex gap-1 cursor-pointer ${quota == itm ? "active" : ""} quotabox`}>
-                                                <div className={`size-4 rounded-full border checkbox relative ${quota == itm ? "bg-white" : ""} quotabox`}> </div>
-                                                <span className="text-sm text-white">{itm}</span>
+                                            <div onClick={() => checkinquota(itm.key)} className={`inline-flex gap-1 cursor-pointer ${quota == itm.key ? "active" : ""} quotabox`}>
+                                                <div className={`size-4 rounded-full border checkbox relative ${quota == itm.key ? "bg-white" : ""} quotabox`}> </div>
+                                                <span className="text-sm text-white">{itm.title}</span>
                                             </div>
                                         </>
                                     ))
