@@ -5,7 +5,7 @@ import FromField from "./FromField"
 import LabelSearch from "./LabelSearch"
 import { CloseCircleFilled, DownOutlined, PlusOutlined } from "@ant-design/icons"
 import TravellersBox from "./TravellersBox"
-import { formatDate, pfts, token, trips } from '../../Utils'
+import { formatDate, pfts, trips } from '../../Utils'
 import axios from 'axios'
 
 const Home = () => {
@@ -168,11 +168,11 @@ const Home = () => {
             if (Object.keys(searchModifiers).length > 0) {
                 data.searchQuery.searchModifiers = searchModifiers;
             }
-            const resp = await axios.post('https://api.tripjack.com/fms/v1/air-search-all', data, {
+            const resp = await axios.post('https://apitest.tripjack.com/fms/v1/air-search-all', data, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': token
-                }
+                    'apikey': '7121041a825bdf-f95d-40a6-8663-3bd50825a0ec'
+                },
             });
             console.log(resp.data);
         } catch (error) {
