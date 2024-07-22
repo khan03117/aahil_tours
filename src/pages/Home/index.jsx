@@ -120,8 +120,6 @@ const Home = () => {
 
     const searchFlight = async () => {
         try {
-
-
             let routeInfos = [];
             if (trip === 1) { // One Way
                 routeInfos = fdata.map((itm) => ({
@@ -173,7 +171,7 @@ const Home = () => {
             const resp = await axios.post('https://api.tripjack.com/fms/v1/air-search-all', data, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    'apikey': token
                 }
             });
             console.log(resp.data);
