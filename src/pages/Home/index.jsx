@@ -5,7 +5,8 @@ import FromField from "./FromField"
 import LabelSearch from "./LabelSearch"
 import { CloseCircleFilled, DownOutlined, PlusOutlined } from "@ant-design/icons"
 import TravellersBox from "./TravellersBox"
-import { pfts, trips } from '../../Utils'
+import { formatDate, pfts, token, trips } from '../../Utils'
+import axios from 'axios'
 
 const Home = () => {
     const [travellers, setTravellers] = useState({
@@ -37,21 +38,21 @@ const Home = () => {
     };
     const handleDecrement = (key) => {
         setTravellers((prev) => {
-          if (key === 'ADULT' && prev[key] <= 1) {
-            // Ensure the number of adults cannot be less than 1
-            return prev;
-          }
-    
-          let newValue = prev[key] > 0 ? prev[key] - 1 : 0;
-          let newTravellers = { ...prev, [key]: newValue };
-    
-          if (key === 'ADULT' && newTravellers['INFANT'] > newValue) {
-            newTravellers['INFANT'] = newValue;
-          }
-    
-          return newTravellers;
+            if (key === 'ADULT' && prev[key] <= 1) {
+                // Ensure the number of adults cannot be less than 1
+                return prev;
+            }
+
+            let newValue = prev[key] > 0 ? prev[key] - 1 : 0;
+            let newTravellers = { ...prev, [key]: newValue };
+
+            if (key === 'ADULT' && newTravellers['INFANT'] > newValue) {
+                newTravellers['INFANT'] = newValue;
+            }
+
+            return newTravellers;
         });
-      };
+    };
 
     const [open, setOpen] = useState({ id: 0, type: "" })
     const [trip, setTrip] = useState(1)
@@ -59,6 +60,7 @@ const Home = () => {
     const [rows, setRows] = useState(1);
     const [fdata, setFdata] = useState([]);
     const [tbox, setTbox] = useState(false);
+
     const handleTravellerBox = () => {
         setTbox(true);
     }
@@ -116,6 +118,69 @@ const Home = () => {
         console.log(fdata)
     }, [fdata]);
 
+    const searchFlight = async () => {
+        try {
+
+
+            let routeInfos = [];
+            if (trip === 1) { // One Way
+                routeInfos = fdata.map((itm) => ({
+                    fromCityOrAirport: { code: itm.From },
+                    toCityOrAirport: { code: itm.To },
+                    travelDate: formatDate(itm.DepartureDate),
+                }));
+            } else if (trip === 2) { // Round Trip
+                routeInfos = fdata.flatMap((itm) => [
+                    {
+                        fromCityOrAirport: { code: itm.From },
+                        toCityOrAirport: { code: itm.To },
+                        travelDate: formatDate(itm.DepartureDate),
+                    },
+                    {
+                        fromCityOrAirport: { code: itm.To },
+                        toCityOrAirport: { code: itm.From },
+                        travelDate: formatDate(itm.ReturnDate),
+                    }
+                ]);
+            } else if (trip === 3) { // Multi-City
+                routeInfos = fdata.map((itm) => ({
+                    fromCityOrAirport: { code: itm.From },
+                    toCityOrAirport: { code: itm.To },
+                    travelDate: formatDate(itm.DepartureDate),
+                }));
+            }
+
+            const searchModifiers = {};
+            if (quota) {
+                searchModifiers['pft'] = quota;
+            }
+
+            const data = {
+                searchQuery: {
+                    cabinClass: cabinClass,
+                    paxInfo: {
+                        ADULT: travellers.ADULT.toString(),
+                        CHILD: travellers.CHILD.toString(),
+                        INFANT: travellers.INFANT.toString(),
+                    },
+                    routeInfos: routeInfos,
+                }
+            };
+
+            if (Object.keys(searchModifiers).length > 0) {
+                data.searchQuery.searchModifiers = searchModifiers;
+            }
+            const resp = await axios.post('https://api.tripjack.com/fms/v1/air-search-all', data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            console.log(resp.data);
+        } catch (error) {
+            console.log(error)
+        }
+    };
     return (
         <>
             <section className="bg-primary p-10">
@@ -164,21 +229,21 @@ const Home = () => {
                                                         <h4>
                                                             <span className="text-xl font-bold me-1">{travellers.ADULT + travellers.CHILD + travellers.INFANT}</span>
                                                             <span className="text-sm me-1">Traveller(s)</span>
-                                                            <span><DownOutlined/></span>
+                                                            <span><DownOutlined /></span>
                                                         </h4>
                                                         <p className="text-sm capitalize">{cabinClass.split('_').join(' ').toLowerCase()}</p>
                                                         {
                                                             tbox && (
                                                                 <>
                                                                     <div ref={boxRef} className="absolute top-full start-0 w-full min-w-[250px]">
-                                                                        <TravellersBox 
-                                                                        travellers={travellers}
-                                                                         handleIncrement={handleIncrement} 
-                                                                         handleDecrement={handleDecrement}
-                                                                          handleCabinClass={handleCabinClass} 
-                                                                          cabinClass={cabinClass} 
-                                                                          c_bin={cabinClass}
-                                                                           />
+                                                                        <TravellersBox
+                                                                            travellers={travellers}
+                                                                            handleIncrement={handleIncrement}
+                                                                            handleDecrement={handleDecrement}
+                                                                            handleCabinClass={handleCabinClass}
+                                                                            cabinClass={cabinClass}
+                                                                            c_bin={cabinClass}
+                                                                        />
                                                                     </div>
                                                                 </>
                                                             )
@@ -194,7 +259,7 @@ const Home = () => {
                                         {
                                             index + 1 == rows ? <>
                                                 <div className={`w-full h-full ${trip != 3 ? '' : 'p-3 flex gap-2 items-center'}`}>
-                                                    <button className={`px-7 text-sm ${trip != 3 ? 'h-full w-full rounded-e' : 'py-2 rounded-full'}   bg-orange-900 text-white outline-none`}>Search</button>
+                                                    <button onClick={searchFlight} className={`px-7 text-sm ${trip != 3 ? 'h-full w-full rounded-e' : 'py-2 rounded-full'}   bg-orange-900 text-white outline-none`}>Search</button>
                                                     <button onClick={addcity} className="text-primary px-4 py-2 text-sm border border-primary rounded-full">
                                                         <PlusOutlined /> Add City
                                                     </button>
@@ -207,17 +272,11 @@ const Home = () => {
                                                             </>
                                                         )
                                                     }
-
-
                                                 </div>
 
-                                            </> : <>
-
-                                            </>
+                                            </> : <></>
                                         }
                                     </div>
-
-
                                 </div>
                             </>
                         ))

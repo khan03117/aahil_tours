@@ -8,7 +8,7 @@ const DateField = ({ label, disabled, handletrip, handleFdata, id }) => {
   const [startDate, setStartDate] = React.useState(new Date());
   const handleDate = (date) => {
     setStartDate(date);
-    handleFdata(id, label, date);
+    handleFdata(id, label.split(' ').join(''), date);
   }
   return (
     <>

@@ -48,11 +48,11 @@ const TravellersBox = ({ travellers, handleIncrement, handleDecrement, handleCab
 };
 
 TravellersBox.propTypes = {
-  travellers: PropTypes.object.isRequired,
-  handleIncrement: PropTypes.func.isRequired,
-  handleDecrement: PropTypes.func.isRequired,
-  handleTravellerBox: PropTypes.func.isRequired,
-  handleCabinClass: PropTypes.func.isRequired,
+  travellers: PropTypes.object,
+  handleIncrement: PropTypes.func,
+  handleDecrement: PropTypes.func,
+  handleTravellerBox: PropTypes.func,
+  handleCabinClass: PropTypes.func,
   c_bin: PropTypes.string,
   closeTravelBox: PropTypes.func
 };
