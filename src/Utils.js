@@ -27,4 +27,28 @@ export const formatDate = (date) => {
     const d = new Date(date);
     return d.toISOString().split('T')[0]; // This will give us YYYY-MM-DD
 };
-export const token = "7121041a825bdf-f95d-40a6-8663-3bd50825a0ec"
+export const token = "7121041a825bdf-f95d-40a6-8663-3bd50825a0ec";
+export const BASE_URL = "http://localhost/laravel/aahil_backend/";
+export const getData = async (endpoint) => {
+    try {
+        const response = await fetch(BASE_URL + 'api/' + endpoint, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+export const SEARCH = "https://apitest.tripjack.com/fms/v1/air-search-all";
+export const FAIR_RULE = "https://apitest.tripjack.com/fms/v2/farerule";
+export const REVIEW = "https://apitest.tripjack.com/fms/v1/review";
+export const BOOK = "https://apitest.tripjack.com/oms/v1/air/book";
+export const PRICE_VALIDATE = "https://apitest.tripjack.com/oms/v1/air/fare-validate";
+export const BOOK_DETAILS = "https://apitest.tripjack.com/oms/v1/booking-details";
+export const SEAT = "https://apitest.tripjack.com/fms/v1/seat";
+export const USER_DETAILS = "https://apitest.tripjack.com/ums/v1/user-detail";
+

@@ -1,42 +1,101 @@
 import PropTypes from 'prop-types';
 import LabelSearch from './LabelSearch';
+import { useRef, useState } from 'react';
+import React from 'react';
+import { getData } from '../../Utils';
+const FromField = ({ label,  id, handleFdata }) => {
+  const [keyword, setKeyword] = React.useState('');
+  const [open, setOpen] = useState(false);
+  const [cities, setCities] = React.useState([]);
+  const [code, setCode] = React.useState({name : "", code : ""});
+  const handleOpen = () => {
+    setOpen(!open);
+  }
+  const handleKeyWord = (e) => {
+    const val = e.target.value;
+    setKeyword(val);
+  }
+  const ref = useRef(null);
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setOpen(false);
+    }
+  };
+  const getdata = async () =>{
+    if(keyword.length > 3){
+    const items = await getData(`search-airport?search=${keyword}&notin=XHX,MDQ,SDE`);
+    setCities(items.data);
+    }else{
+      setCities([])
+    }
+  }
+  React.useEffect(() => {
+    if(keyword){
+      getdata();
+    }
+   
+  }, [keyword]);
+  const handleCode = (obj) => {
+    setCode(obj);
+    setOpen(false);
+    handleFdata(id, label,  obj.code);
+  }
+  
+  React.useEffect(() => {    
+    if (ref) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
 
-const FromField = ({ label, handleopen, id, handleFdata }) => {
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
 
   return (
-    <div onClick={() => handleopen(id, label)} className="w-full group p-3 cursor-pointer relative bg-white">
+    <div onClick={handleOpen} className="w-full h-full group p-3 cursor-pointer relative bg-white">
       <LabelSearch label={label} />
       <div className="w-full">
-        <h4 className="text-xl font-bold">Delhi</h4>
-        <p className="text-sm font-light">Indira Gandhi International Airport</p>
+        <h4 className="text-xl font-bold">{cities.find(obj => obj.code == code.code)?.code}</h4>
+        <p className="text-sm font-light">{cities.find(obj => obj.code == code.code)?.name}</p>
       </div>
+      {
+        open && (
+          <>
 
-      <div className="absolute group-hover:block hidden w-full z-50 bg-white top-16 p-1 start-0 border border-blue-gray-200">
-        <input
-          type="text"
-          placeholder="Search country"
-          className="w-full p-2 text-sm outline-none border border-blue-gray-200"
-          onClick={(e) => e.stopPropagation()}
-        />
-        <div className="w-full">
-          <ul className="*:p-1 *:text-sm">
-            <li>
-              <button onClick={() => handleFdata(id, label, 'Del')} className="w-full text-start">
-                Delhi (Indira Gandhi Airport)
-              </button>
-            </li>
-            <li>
-              <button className="w-full text-start">Delhi (Indira Gandhi Airport)</button>
-            </li>
-            <li>
-              <button className="w-full text-start">Delhi (Indira Gandhi Airport)</button>
-            </li>
-            <li>
-              <button className="w-full text-start">Delhi (Indira Gandhi Airport)</button>
-            </li>
-          </ul>
-        </div>
-      </div>
+            <div ref={ref} className="absolute  w-full z-50 bg-white top-16 p-1 start-0 border border-blue-gray-200">
+              <input
+                type="text"
+                placeholder="Search country"
+                className="w-full p-2 text-sm outline-none border border-blue-gray-200"
+                onChange={handleKeyWord}
+                value={keyword}
+                onClick={(e) => e.stopPropagation()}
+              />
+              <div className="w-full">
+                <ul className="*:p-1 *:text-sm">
+                  {
+                    cities.length > 0 && cities.map((cit) => (
+                      <>
+                       <li>
+                    <button onClick={() => handleCode(cit)}  className="w-full text-start">
+                     {cit.code} {cit.name}
+                    </button>
+                  </li>
+                      </>
+                    ))
+                  }
+                 
+                 
+                </ul>
+              </div>
+            </div>
+          </>
+        )
+      }
 
     </div>
   );

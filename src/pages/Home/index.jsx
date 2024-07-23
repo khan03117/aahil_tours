@@ -5,8 +5,9 @@ import FromField from "./FromField"
 import LabelSearch from "./LabelSearch"
 import { CloseCircleFilled, DownOutlined, PlusOutlined } from "@ant-design/icons"
 import TravellersBox from "./TravellersBox"
-import { formatDate, pfts, trips } from '../../Utils'
+import { formatDate, pfts, SEARCH, trips } from '../../Utils'
 import axios from 'axios'
+import SingleFlightResBox from '../SearchFlightResult/SingleFlightResBox'
 
 const Home = () => {
     const [travellers, setTravellers] = useState({
@@ -60,6 +61,10 @@ const Home = () => {
     const [rows, setRows] = useState(1);
     const [fdata, setFdata] = useState([]);
     const [tbox, setTbox] = useState(false);
+    const [isInternational, setInternational] = useState(false);
+    const [onwards, setOnwards] = useState([]);
+    const [returns, setReturns] = useState([]);
+    const [comobs, setCombos] = useState([]);
 
     const handleTravellerBox = () => {
         setTbox(true);
@@ -91,9 +96,7 @@ const Home = () => {
         }
         setFdata(temp);
     }
-    const handleopen = (index, type) => {
-        setOpen({ id: index, type: type });
-    }
+
     const checkinquota = (itm) => {
         setQuota((prev) => (prev != itm ? itm : ""));
     }
@@ -115,6 +118,7 @@ const Home = () => {
         setOpen({ id: "", type: "" })
     }
     useEffect(() => {
+        setInternational(false);
         console.log(fdata)
     }, [fdata]);
 
@@ -168,17 +172,39 @@ const Home = () => {
             if (Object.keys(searchModifiers).length > 0) {
                 data.searchQuery.searchModifiers = searchModifiers;
             }
-            const resp = await axios.post('https://apitest.tripjack.com/fms/v1/air-search-all', data, {
+            const resp = await axios.post(SEARCH, data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'apikey': '7121041a825bdf-f95d-40a6-8663-3bd50825a0ec'
                 },
             });
-            console.log(resp.data);
+            const { searchResult } = resp.data;
+            const { tripInfos } = searchResult;
+            if (trip === 1) {
+                setOnwards(tripInfos.ONWARD || []);
+            } else if (trip === 2) {
+                setOnwards(tripInfos.ONWARD || []);
+                setReturns(tripInfos.RETURN || []);
+            } else if (trip === 3 && isInternational) {
+                setCombos(tripInfos.COMBO || []);
+            } else if (trip === 3) {
+                // Handle Domestic Multi-City
+                // Assuming searchResult contains equivalent number of route infos
+                const multiCityResults = searchResult.routeInfos.map((info, index) => ({
+                    id: index + 1,
+                    ...info
+                }));
+                setOnwards(multiCityResults);
+            }
         } catch (error) {
             console.log(error)
         }
     };
+    useEffect(() => {
+        console.log({ "onwards": onwards });
+        console.log({ "return": returns });
+        console.log({ "coms": comobs });
+    }, [onwards, returns, comobs])
     return (
         <>
             <section className="bg-primary p-10">
@@ -201,10 +227,10 @@ const Home = () => {
                             <>
                                 <div key={a} className="grid border-b border-blue-gray-100 last:border-none grid-cols-8  *:border-e *:border-blue-gray-100">
                                     <div className="col-span-2 rounded-s">
-                                        <FromField handleFdata={handleFdata} id={index} handleopen={handleopen} open={open} label="From" />
+                                        <FromField handleFdata={handleFdata} id={index} open={open} label="From" />
                                     </div>
                                     <div className="col-span-2">
-                                        <FromField handleFdata={handleFdata} id={index} handleopen={handleopen} open={open} label="To" />
+                                        <FromField handleFdata={handleFdata} id={index} open={open} label="To" />
                                     </div>
                                     <div className="col-span-1">
                                         <DateField handleFdata={handleFdata} id={index} handletrip={handletrip} disabled={false} label={"Departure Date"} />
@@ -297,6 +323,14 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <section className="py-10">
+                {onwards.length > 0 && onwards.map((itm) => (
+                    <>
+                        <SingleFlightResBox flight={itm} />
+                    </>
+                ))}
             </section>
         </>
     )
