@@ -1,4 +1,4 @@
-// import React from 'react'
+import React from 'react'
 import food from '../../assets/fast-food.svg'
 import vistara from '../../assets/vistara.png'
 import seat from '../../assets/airplane-seat.svg'
@@ -6,22 +6,58 @@ import { CloseOutlined } from '@ant-design/icons'
 import FlightDetails from './FlightDetails'
 import FareDetails from './FareDetails'
 import BaggageInformation from './BaggageInformation'
-import { useState } from 'react'
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Radio } from '@material-tailwind/react'
+import axios from 'axios'
+import { FAIR_RULE, token } from '../../Utils'
 
-// import PropTypes from 'prop-types';
-
-const SingleFlightResBox = () => {
-    const [view, setView] = useState('');
+const SingleFlightResBox = ({ flight, paxinfo }) => {
+    const [view, setView] = React.useState('');
     const [show, setShow] = useState(false);
+    const [fairRule, setFairRule] = useState([]);
     const viewDetails = (itm) => {
         setView(itm)
     }
     const handleshow = () => {
         setShow(!show);
         setView('Flight Details')
+    }
+    const si = flight.sI;
+    const pricelist = flight.totalPriceList;
+    const stops = si.length - 1;
+    const countPrice = (id) => {
+        let price = 0;
+        const arr = pricelist.find(obj => obj.id == id);
+        if (arr) {
+            const adult_price = arr.fd.ADULT.fC.TF;
+            const child_price = arr.fd?.CHILD?.fC.TF ?? 0;
+            const infant_price = arr.fd?.INFANT?.fC.TF ?? 0;
+            const adultcount = paxinfo.ADULT;
+            const childcount = paxinfo.CHILD;
+            const infantcount = paxinfo.INFANT;
+            price = adult_price * adultcount + child_price * childcount + infant_price * infantcount;
+            return price;
+        } else {
+            return 0;
+        }
 
     }
 
+    const getFareRule =  async(id) => {
+        const data = {
+            id: id,
+            "flowType": "SEARCH"
+        }
+        const item = await axios.post(FAIR_RULE, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey' : token
+                }
+        });
+        setFairRule(item.data);
+    }
+    console.log(fairRule)
     return (
         <>
             <div className="w-full bg-white rounded-lg  p-5 my-3 relative">
@@ -42,29 +78,64 @@ const SingleFlightResBox = () => {
                                         <img src={vistara} alt='image' />
                                     </div>
                                     <div className='text'>
-                                        <p className='text-sm text-black font-light'>Vistara</p>
-                                        <p className='text-sm text-gray-400 font-light'>UK-929</p>
+                                        <p className='text-sm text-black font-light'>{si[0].fD.aI.name}</p>
+                                        <p className='text-sm text-gray-400 font-light'>{si[0].fD.aI.code}-{si[0].fD.fN}</p>
                                     </div>
 
                                 </div>
                             </div>
                             <div className="col-span-1">
                                 <div className="w-full">
-                                    <p className='font-bold text-lg'>21:25</p>
-                                    <p className='text-sm text-black font-light'>New Delhi</p>
+                                    <p className='font-bold text-lg'>{si[0].dt.split('T')[1]}</p>
+                                    <p className='text-sm text-black font-light'>
+                                        {si[0].da.city}
+                                    </p>
                                 </div>
                             </div>
-                            <div className="col-span-1"></div>
+
                             <div className="col-span-1">
                                 <div className="w-full">
-                                    <p className='font-bold text-lg'>06:15</p>
-                                    <p className='text-sm text-black font-light'>Mumbai</p>
+                                    <p className='font-bold text-lg'>{si[stops].dt.split('T')[1]}</p>
+                                    <p className='text-sm text-black font-light'>
+                                        {si[stops].aa.city}
+                                    </p>
                                 </div>
                             </div>
-                            <div className="col-span-1">
+                            <div className="col-span-2">
                                 <div className="w-full">
-                                    <p className='font-bold text-xl text-red-600'>$5,088</p>
-                                    <button className='text-xs border border-primary px-3 py-1 rounded-full text-primary'>+ More Fare</button>
+                                    {
+                                        pricelist.map(plist => (
+                                            <>
+                                                <div className="block">
+                                                    <div className="flex items-center">
+                                                        <Radio onClick={() => getFareRule(plist.id)} label={
+                                                            <>
+                                                                <p className='font-bold text-xl text-red-600'>{countPrice(plist.id)}</p>
+                                                                <div className="flex gap-2 flex-wrap items-center text-[12px]">
+                                                                    <span className="bg-yellow-200  px-1 py-[2px]">
+                                                                        {plist.fareIdentifier}
+                                                                    </span>
+                                                                    <span>
+                                                                        {plist.fd.ADULT.cc}
+                                                                    </span>
+                                                                    <span>
+                                                                        {plist.fd.ADULT.mI ? 'Free Meal' : ''}
+                                                                    </span>
+                                                                    <span>
+                                                                        {plist.fd.ADULT.rT ? 'Refundable' : 'Not Refundable'}
+                                                                    </span>
+                                                                </div>
+                                                            </>
+                                                        } name='price_id' value={plist.id} />
+                                                    </div>
+
+
+                                                </div>
+
+                                            </>
+                                        ))
+                                    }
+
                                 </div>
                             </div>
                             <div className="col-span-1">
@@ -75,7 +146,7 @@ const SingleFlightResBox = () => {
                                             <img src={seat} alt='image'></img>
                                         </div>
                                         <div className="text">
-                                            <p className='text-xs text-red-500 font-bold'>2 Seat Left</p>
+                                            <p className='text-xs text-red-500 font-bold'>{pricelist[0].fd.ADULT.sR} Seat Left</p>
                                         </div>
                                     </div>
                                 </div>
@@ -85,6 +156,10 @@ const SingleFlightResBox = () => {
                     <div className="col-span-1">
                         <div className="w-full py-2">
                             <button onClick={handleshow} className={`font-bold text-sm  hover:bg-primary hover:text-white px-4 py-1 rounded ${show ? "bg-primary text-white" : "text-black bg-gray-200"}`}>View Details </button>
+                            <p className="text-sm mt-2">{si[0].iand && (<>
+                                Flight Arrives after 1 Day(s)
+                            </>)}</p>
+
                         </div>
                     </div>
                     <div className="col-span-1">
@@ -152,7 +227,10 @@ const SingleFlightResBox = () => {
     )
 }
 
-
+SingleFlightResBox.propTypes = {
+    flight: PropTypes.object.isRequired,
+    paxinfo: PropTypes.object
+}
 
 
 export default SingleFlightResBox

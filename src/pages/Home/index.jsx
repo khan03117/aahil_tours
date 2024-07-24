@@ -5,9 +5,8 @@ import FromField from "./FromField"
 import LabelSearch from "./LabelSearch"
 import { CloseCircleFilled, DownOutlined, PlusOutlined } from "@ant-design/icons"
 import TravellersBox from "./TravellersBox"
-import { formatDate, pfts, SEARCH, trips } from '../../Utils'
-import axios from 'axios'
-import SingleFlightResBox from '../SearchFlightResult/SingleFlightResBox'
+import { formatDate, pfts,  trips } from '../../Utils'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
     const [travellers, setTravellers] = useState({
@@ -61,10 +60,8 @@ const Home = () => {
     const [rows, setRows] = useState(1);
     const [fdata, setFdata] = useState([]);
     const [tbox, setTbox] = useState(false);
-    const [isInternational, setInternational] = useState(false);
-    const [onwards, setOnwards] = useState([]);
-    const [returns, setReturns] = useState([]);
-    const [comobs, setCombos] = useState([]);
+   
+  
 
     const handleTravellerBox = () => {
         setTbox(true);
@@ -118,10 +115,9 @@ const Home = () => {
         setOpen({ id: "", type: "" })
     }
     useEffect(() => {
-        setInternational(false);
         console.log(fdata)
     }, [fdata]);
-
+    const navigate  = useNavigate();
     const searchFlight = async () => {
         try {
             let routeInfos = [];
@@ -172,39 +168,15 @@ const Home = () => {
             if (Object.keys(searchModifiers).length > 0) {
                 data.searchQuery.searchModifiers = searchModifiers;
             }
-            const resp = await axios.post(SEARCH, data, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': '7121041a825bdf-f95d-40a6-8663-3bd50825a0ec'
-                },
-            });
-            const { searchResult } = resp.data;
-            const { tripInfos } = searchResult;
-            if (trip === 1) {
-                setOnwards(tripInfos.ONWARD || []);
-            } else if (trip === 2) {
-                setOnwards(tripInfos.ONWARD || []);
-                setReturns(tripInfos.RETURN || []);
-            } else if (trip === 3 && isInternational) {
-                setCombos(tripInfos.COMBO || []);
-            } else if (trip === 3) {
-                // Handle Domestic Multi-City
-                // Assuming searchResult contains equivalent number of route infos
-                const multiCityResults = searchResult.routeInfos.map((info, index) => ({
-                    id: index + 1,
-                    ...info
-                }));
-                setOnwards(multiCityResults);
-            }
+
+            localStorage.setItem('search', JSON.stringify({data : data, trip : trip}));
+            
+            navigate('/search-flight')
         } catch (error) {
             console.log(error)
         }
     };
-    useEffect(() => {
-        console.log({ "onwards": onwards });
-        console.log({ "return": returns });
-        console.log({ "coms": comobs });
-    }, [onwards, returns, comobs])
+ 
     return (
         <>
             <section className="bg-primary p-10">
@@ -323,14 +295,6 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <section className="py-10">
-                {onwards.length > 0 && onwards.map((itm) => (
-                    <>
-                        <SingleFlightResBox flight={itm} />
-                    </>
-                ))}
             </section>
         </>
     )
