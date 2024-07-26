@@ -136,7 +136,7 @@ const AddPassengerDetails = () => {
                                         </div>
                                         <div className="w-full bg-white py-3">
                                             <p className="text-gray-400 text-sm">to claim credit of GST charged by airlines. please enter your company GST number</p>
-                                            <div className="flex">
+                                            <div className="flex py-3">
                                                  <div>
                                                     <label htmlFor="" className="text-sm">Registration Number</label>
                                                     <input type="text" className="border-b border-gary-900 text-sm outline-none w-full"/>
