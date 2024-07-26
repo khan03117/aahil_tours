@@ -6,6 +6,7 @@ import HotelLists from './hotel/HotelLists'
 import SingleHotel from './hotel/SingleHotel'
 import SearchFlightsRes from './pages/SearchFlightResult/SearchFlightsRes'
 import Review from './pages/Review'
+import AddPassengerDetails from './pages/SearchFlightResult/AddPassengerDetails'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
       <Route path='/single-list' element={<SingleHotel/>}/>
       <Route path='/search-flight' element={<SearchFlightsRes/>}/>
       <Route path='/review/:id' element={<Review/>} />
+      <Route path='passenger-details' element={<AddPassengerDetails/>}/>
       </Route>
       </>
     )
