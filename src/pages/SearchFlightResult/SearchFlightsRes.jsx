@@ -77,7 +77,7 @@ const SearchFlightsRes = () => {
                                                         {
                                                             onwards.map((flight) => (
                                                                 <>
-                                                                    <SingleFlightResBox paxinfo={data.searchQuery.paxInfo} flight={flight} />
+                                                                    <SingleFlightResBox  paxinfo={data.searchQuery.paxInfo} flight={flight} />
                                                                 </>
                                                             ))
                                                         }

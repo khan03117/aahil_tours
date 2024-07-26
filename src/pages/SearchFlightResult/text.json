@@ -1,0 +1,46 @@
+{
+    "fareRule": {
+        "BLR-DEL": {
+            "isML": true,
+            "isHB": false,
+            "rT": "REFUNDABLE",
+            "cB": {
+                "ADT": "25 Kg (01 Piece only)",
+                "CNN": "25 Kg (01 Piece only)",
+                "INF": "10 Kg (01 Piece only)"
+            },
+            "hB": {
+                "ADT": "7 Kg",
+                "CNN": "7 Kg",
+                "INF": "7 Kg"
+            },
+            "fr": {
+                "CANCELLATION": {
+                    "DEFAULT": {
+                        "amount": 3000,
+                        "policyInfo": "__nls__Cancellation permitted 25 Hrs before scheduled departure__nls__Cancellation Penalty : INR 3,000/- or basic fare whichever is lower",
+                        "fcs": {
+                            "ACFT": 0,
+                            "ACF": 3000
+                        }
+                    }
+                },
+                "DATECHANGE": {
+                    "DEFAULT": {
+                        "amount": 3000,
+                        "policyInfo": "__nls__Changes permitted 25 Hrs before scheduled departure__nls__Change Penalty : INR 3,000/- or basic fare whichever is lower + Fare Difference",
+                        "fcs": {
+                            "ARFT": 0,
+                            "ARF": 3000
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "status": {
+        "success": true,
+        "httpStatus": 200
+    },
+    "metaInfo": {}
+}

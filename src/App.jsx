@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import HotelLists from './hotel/HotelLists'
 import SingleHotel from './hotel/SingleHotel'
 import SearchFlightsRes from './pages/SearchFlightResult/SearchFlightsRes'
+import Review from './pages/Review'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
       <Route path='/hotel-list' element={<HotelLists/>}/>
       <Route path='/single-list' element={<SingleHotel/>}/>
       <Route path='/search-flight' element={<SearchFlightsRes/>}/>
+      <Route path='/review/:id' element={<Review/>} />
       </Route>
       </>
     )

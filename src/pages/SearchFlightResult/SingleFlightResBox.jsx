@@ -11,17 +11,22 @@ import PropTypes from 'prop-types';
 import { Radio } from '@material-tailwind/react'
 import axios from 'axios'
 import { FAIR_RULE, token } from '../../Utils'
+import FareRule from './FareRule'
+import { Link } from 'react-router-dom'
 
 const SingleFlightResBox = ({ flight, paxinfo }) => {
     const [view, setView] = React.useState('');
     const [show, setShow] = useState(false);
     const [fairRule, setFairRule] = useState([]);
+    const [price_id, setPrice_id] = useState('');
+    const [priceindex, setPriceIndex] = useState(0);
     const viewDetails = (itm) => {
         setView(itm)
     }
     const handleshow = () => {
         setShow(!show);
-        setView('Flight Details')
+        setView('Flight Details');
+        console.log(price_id);
     }
     const si = flight.sI;
     const pricelist = flight.totalPriceList;
@@ -44,7 +49,12 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
 
     }
 
-    const getFareRule =  async(id) => {
+    const getFareRule = async (id) => {
+        setPrice_id(id);
+        const fdx = pricelist.findIndex(obj => obj.id == id);
+        if (fdx > -1) {
+            setPriceIndex(fdx);
+        }
         const data = {
             id: id,
             "flowType": "SEARCH"
@@ -52,12 +62,11 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
         const item = await axios.post(FAIR_RULE, data, {
             headers: {
                 'Content-Type': 'application/json',
-                'apikey' : token
-                }
+                'apikey': token
+            }
         });
         setFairRule(item.data);
     }
-    console.log(fairRule)
     return (
         <>
             <div className="w-full bg-white rounded-lg  p-5 my-3 relative">
@@ -104,11 +113,12 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                             <div className="col-span-2">
                                 <div className="w-full">
                                     {
-                                        pricelist.map(plist => (
+                                        pricelist.map((plist, idx) => (
                                             <>
                                                 <div className="block">
                                                     <div className="flex items-center">
-                                                        <Radio onClick={() => getFareRule(plist.id)} label={
+
+                                                        <Radio checked={priceindex > -1 ? priceindex == idx : idx == 0} onClick={() => getFareRule(plist.id)} label={
                                                             <>
                                                                 <p className='font-bold text-xl text-red-600'>{countPrice(plist.id)}</p>
                                                                 <div className="flex gap-2 flex-wrap items-center text-[12px]">
@@ -140,13 +150,13 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                             </div>
                             <div className="col-span-1">
                                 <div className="w-full">
-                                    <button className='font-bold text-md text-white bg-orange-800 px-4 py-1 rounded-full'>BOOK NOW</button>
+                                    <Link to={'/review/'+price_id} className='font-bold text-md text-white bg-orange-800 px-4 py-1 rounded-full'>BOOK NOW</Link>
                                     <div className="flex mt-2 gap-2">
                                         <div className='icon'>
                                             <img src={seat} alt='image'></img>
                                         </div>
                                         <div className="text">
-                                            <p className='text-xs text-red-500 font-bold'>{pricelist[0].fd.ADULT.sR} Seat Left</p>
+                                            <p className='text-xs text-red-500 font-bold'>{pricelist[priceindex ?? 0].fd.ADULT.sR} Seat Left</p>
                                         </div>
                                     </div>
                                 </div>
@@ -192,28 +202,10 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                                                     </button>
                                                 </div>
                                             </div>
-                                            {
-                                                view == "Flight Details" && (
-                                                    <>
-                                                        <FlightDetails />
-                                                    </>
-                                                )
-                                            }
-                                            {
-                                                view == "Fare Details" && (
-                                                    <>
-                                                        <FareDetails />
-                                                    </>
-                                                )
-                                            }
-                                            {
-                                                view == "Baggage Information" && (
-                                                    <>
-                                                        <BaggageInformation />
-                                                    </>
-                                                )
-                                            }
-
+                                            {view === "Flight Details" && <FlightDetails flights={si} />}
+                                            {view === "Fare Details" && <FareDetails id={price_id} pricelist={pricelist} paxinfo={paxinfo} rule={fairRule} />}
+                                            {view === "Fare Rules" && <FareRule rule={fairRule} />}
+                                            {view === "Baggage Information" && <BaggageInformation />}
 
                                         </div>
                                     </div>
