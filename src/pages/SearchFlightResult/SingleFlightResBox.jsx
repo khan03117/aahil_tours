@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import food from '../../assets/fast-food.svg'
 import vistara from '../../assets/vistara.png'
 import seat from '../../assets/airplane-seat.svg'
@@ -23,10 +23,11 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
     const viewDetails = (itm) => {
         setView(itm)
     }
-    const handleshow = () => {
+    const handleshow = (id) => {
         setShow(!show);
+        getFareRule(id);
         setView('Flight Details');
-        console.log(price_id);
+        
     }
     const si = flight.sI;
     const pricelist = flight.totalPriceList;
@@ -67,6 +68,17 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
         });
         setFairRule(item.data);
     }
+    
+    useEffect(() => {
+        setPriceIndex(0);
+        if(pricelist.length > 0){
+            setPrice_id(pricelist[0].id)
+        }
+      
+    }, []);
+    if(!flight){
+        return false;
+    }
     return (
         <>
             <div className="w-full bg-white rounded-lg  p-5 my-3 relative">
@@ -80,7 +92,10 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                         </div>
                     </div>
                     <div className="col-span-1">
-                        <div className="grid grid-cols-6">
+                        <div className="grid grid-cols-6 relative">
+                            <div className="absolute text-xs text-center top-[10%] translate-x-[-50%] left-[28%]  w-10 h-1 border-t border-blue-gray-500">
+                                {stops+1} stops
+                            </div>
                             <div className="col-span-1">
                                 <div className="w-full flex gap-3 items-center">
                                     <div className='icon'>
@@ -104,7 +119,7 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
 
                             <div className="col-span-1">
                                 <div className="w-full">
-                                    <p className='font-bold text-lg'>{si[stops].dt.split('T')[1]}</p>
+                                    <p className='font-bold text-lg'>{si[stops].at.split('T')[1]}</p>
                                     <p className='text-sm text-black font-light'>
                                         {si[stops].aa.city}
                                     </p>
@@ -117,8 +132,8 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                                             <>
                                                 <div className="block">
                                                     <div className="flex items-center">
-
-                                                        <Radio checked={priceindex > -1 ? priceindex == idx : idx == 0} onClick={() => getFareRule(plist.id)} label={
+                                                        
+                                                        <Radio checked={priceindex == idx ? 'checked' : false} onClick={() => getFareRule(plist.id)} label={
                                                             <>
                                                                 <p className='font-bold text-xl text-red-600'>{countPrice(plist.id)}</p>
                                                                 <div className="flex gap-2 flex-wrap items-center text-[12px]">
@@ -136,10 +151,8 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                                                                     </span>
                                                                 </div>
                                                             </>
-                                                        } name='price_id' value={plist.id} />
+                                                        }  value={plist.id} />
                                                     </div>
-
-
                                                 </div>
 
                                             </>
@@ -150,7 +163,7 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                             </div>
                             <div className="col-span-1">
                                 <div className="w-full">
-                                    <Link to={'/review/'+price_id} className='font-bold text-md text-white bg-orange-800 px-4 py-1 rounded-full'>BOOK NOW</Link>
+                                    <Link to={'/review/'+price_id} className='font-bold text-sm block text-nowrap  text-white bg-orange-800 px-4 py-1 rounded-full'>BOOK NOW</Link>
                                     <div className="flex mt-2 gap-2">
                                         <div className='icon'>
                                             <img src={seat} alt='image'></img>
@@ -165,7 +178,7 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                     </div>
                     <div className="col-span-1">
                         <div className="w-full py-2">
-                            <button onClick={handleshow} className={`font-bold text-sm  hover:bg-primary hover:text-white px-4 py-1 rounded ${show ? "bg-primary text-white" : "text-black bg-gray-200"}`}>View Details </button>
+                            <button onClick={() => handleshow(pricelist[priceindex ?? 0].id)} className={`font-bold text-sm  hover:bg-primary hover:text-white px-4 py-1 rounded ${show ? "bg-primary text-white" : "text-black bg-gray-200"}`}>View Details </button>
                             <p className="text-sm mt-2">{si[0].iand && (<>
                                 Flight Arrives after 1 Day(s)
                             </>)}</p>
@@ -174,7 +187,7 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                     </div>
                     <div className="col-span-1">
                         <div className="w-full py-2">
-                            <p className='bg-yellow-50 inline-block border-l-2 border-yellow-800'>Use Promo Code: EMTSENIOR to get additional Rs.400 instant discount </p>
+                            <p className='bg-yellow-50 text-xs px-2 py-1 inline-block border-l-2 border-yellow-800'>Use Promo Code: EMTSENIOR to get additional Rs.400 instant discount </p>
                         </div>
                     </div>
 

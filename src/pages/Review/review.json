@@ -294,12 +294,31 @@
                     "countryCode": "IN"
                 },
                 "travelDate": "2024-07-26"
+            },
+            {
+                "fromCityOrAirport": {
+                    "code": "Kolkata",
+                    "name": "Delhi Indira Gandhi Intl",
+                    "cityCode": "DEL",
+                    "city": "Delhi",
+                    "country": "India",
+                    "countryCode": "IN"
+                },
+                "toCityOrAirport": {
+                    "code": "CCU",
+                    "name": "Netaji Subhas Chandra Bose Intl",
+                    "cityCode": "CCU",
+                    "city": "Delhi",
+                    "country": "India",
+                    "countryCode": "IN"
+                },
+                "travelDate": "2024-07-26"
             }
         ],
         "cabinClass": "ECONOMY",
         "paxInfo": {
-            "ADULT": 1,
-            "CHILD": 0,
+            "ADULT": 2,
+            "CHILD": 1,
             "INFANT": 0
         },
         "requestId": "4862378576",

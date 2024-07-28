@@ -13,6 +13,7 @@ const SearchFlightsRes = () => {
     const [isInternational, setInternational] = React.useState(false);
     const searchdata = localStorage.getItem('search');
     const { data, trip } = JSON.parse(searchdata);
+  
     const searchFlight = async () => {
         const resp = await axios.post(SEARCH, data, {
             headers: {
@@ -44,6 +45,9 @@ const SearchFlightsRes = () => {
         searchFlight();
         console.log(comobs);
     }, []);
+    if(!data.searchQuery.paxInfo){
+        return <div>Loading...</div>
+    }
     return (
         <>
             <section className="bg-[#e8f2fa] py-2 px-5">
@@ -68,7 +72,7 @@ const SearchFlightsRes = () => {
                                     }
                                 </div>
                                 <div className="w-full">
-                                    <div className={`grid ${trip == 2 ? 'col-span-2' : 'col-span-1'}`}>
+                                    <div className={`grid gap-2 ${trip == 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                                         <div className="col-span-1">
                                             {
 
@@ -89,16 +93,12 @@ const SearchFlightsRes = () => {
                                             {
                                                 returns.map((flight) => (
                                                     <>
-                                                       <SingleFlightResBox flight={flight} />
+                                                       <SingleFlightResBox flight={flight} paxinfo={data.searchQuery.paxInfo} />
                                                     </>
                                                 ))
                                             }
                                         </div>
-
-
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>

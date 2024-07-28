@@ -1,8 +1,28 @@
-//import React from 'react'
+import React from 'react'
 
 import { ArrowRightOutlined, CloseOutlined } from "@ant-design/icons"
+import { useLocation } from "react-router-dom"
+import ServiceSelection from "./ServiceSelection";
+import AddDetails from "../passengerDetails/AddDetails";
 
 const AddPassengerDetails = () => {
+    const { state } = useLocation();
+    const { reviews } = state;
+    const [pinfo, setPinfo] = React.useState([]);
+    const handlePinfo = (obj) => {
+        setPinfo([...pinfo, obj]);
+    }
+
+    const totalPax = reviews.searchQuery.paxInfo;
+    const totalarray = Object.entries(totalPax).flatMap(([type, count]) =>
+        Array(count).fill(type)
+    );
+    console.log(totalarray)
+
+
+    React.useEffect(() => {
+        console.log(pinfo);
+    }, [pinfo]);
     return (
         <>
             <section className="py-5 bg-gray-50">
@@ -11,83 +31,53 @@ const AddPassengerDetails = () => {
                         <div className="col-span-9">
                             <div className="w-full border-r-2 border-gray-400 p-2">
                                 <h1 className="text-xl">Passenger Details</h1>
-                                <div className="w-full bg-white border border-gray p-2 rounded-md">
-                                    <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
-                                        <p className="text-black text-md border-b border-gray-400">ADULT 1 : Mr AHIL SINGH</p>
-                                        <div className="w-full py-3 flex gap-4 items-center border-b border-gray-400">
-                                            <input type="text" placeholder="Select from History" className="px-1 py-2 rounded-md" />
-                                            <p className="text-primary text-xs font-semibold">MISSING NAME FORMATE</p>
-                                        </div>
-                                        <div className="w-full bg-white py-3 flex justify-between">
-                                            <div className="div">
-                                                <label htmlFor="" className="block text-sm text-gray-400 w-full">Title</label>
-                                                <select id="select_box" name="select_box" className="border-b border-gary-600 text-sm outline-none w-full">
-                                                    <option value="option1">Mr</option>
-                                                    <option value="option2">Ms</option>
-                                                    <option value="option3">Mss</option>
-                                                </select>
-                                            </div>
-                                            <div className="div">
-                                                <label htmlFor="" className="block text-sm text-gray-400">First Name</label>
-                                                <input type="text" className="border-b border-gary-600 text-sm outline-none w-full" />
-                                            </div>
-                                            <div className="div">
-                                                <label htmlFor="" className="block text-sm text-gray-400">Last Name</label>
-                                                <input type="text" className="border-b border-gary-600 text-sm outline-none w-full" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
-                                        <p className="text-black text-md border-b border-gray-400">Add Baggage , Meal & other services to your Travel</p>
-                                        <div className="w-full bg-white">
-                                            <div className="w-full py-5">
-                                                <p className="text-black text-sm">Bangalore<ArrowRightOutlined />Mumbai <span className="text-sm text-gray-400">on july 26 , 2024</span></p>
-                                            </div>
-                                            <div className="w-full flex justify-between py-3">
-                                                <div>
-                                                    <p className="text-black">ADULT 1</p>
-                                                </div>
-                                                <div className="div">
-                                                    <label htmlFor="" className="block text-sm text-gray-400 w-full">Select Meal</label>
-                                                    <select id="select_box" name="select_box" className="border-b border-gary-600 text-sm outline-none w-full">
-                                                        <option value="option1">Veg Meal</option>
-                                                        <option value="option2">Non veg Meal</option>
+                                <div className="w-full bg-white border border-gray p-2  rounded-md">
+                                    {
 
-                                                    </select>
-                                                </div>
-                                                <div className="div">
-                                                    <label htmlFor="" className="block text-sm text-gray-400 w-full">Select Extra Service</label>
-                                                    <select id="select_box" name="select_box" className="border-b border-gary-600 text-sm outline-none w-full">
-                                                        <option value="option1">Add Extra Service</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="w-full bg-white">
-                                            <div className="w-full py-5">
-                                                <p className="text-black text-sm">Bangalore<ArrowRightOutlined />Mumbai <span className="text-sm text-gray-400">on july 26 , 2024</span></p>
-                                            </div>
-                                            <div className="w-full flex justify-between py-3">
-                                                <div>
-                                                    <p className="text-black">ADULT 1</p>
-                                                </div>
-                                                <div className="div">
-                                                    <label htmlFor="" className="block text-sm text-gray-400 w-full">Select Meal</label>
-                                                    <select id="select_box" name="select_box" className="border-b border-gary-600 text-sm outline-none w-full">
-                                                        <option value="option1">Veg Meal</option>
-                                                        <option value="option2">Non veg Meal</option>
 
-                                                    </select>
-                                                </div>
-                                                <div className="div">
-                                                    <label htmlFor="" className="block text-sm text-gray-400 w-full">Select Extra Service</label>
-                                                    <select id="select_box" name="select_box" className="border-b border-gary-600 text-sm outline-none w-full">
-                                                        <option value="option1">Add Extra Service</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        [...totalarray].map((a, index) => (
+                                            <>
+
+
+                                                {
+                                                    pinfo.length >= index && (
+                                                        <>
+                                                            {
+                                                                pinfo.length > index ? (<>
+                                                                    <p className="text-black text-md border-b border-gray-400">{a} {index + 1} : </p>
+
+                                                                    {
+                                                                        Object.entries(pinfo[index]).map(([k, v]) => (
+                                                                            <>
+                                                                                <span key={k} className='me-2 text-sm'>
+                                                                                    {v}
+                                                                                </span>
+                                                                            </>
+                                                                        ))
+                                                                    }
+
+                                                                </>) : (<>
+                                                                    <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
+                                                                        <p className="text-black text-md border-b border-gray-400">{a} {index + 1} : </p>
+                                                                        <div className="w-full bg-white py-3  px-2">
+                                                                            <AddDetails id={index} show={index == pinfo.length ? true : false} onsubmit={handlePinfo} type={a} />
+                                                                        </div>
+                                                                    </div>
+
+                                                                </>)
+                                                            }
+
+                                                        </>
+                                                    )
+                                                }
+
+
+
+                                            </>
+                                        ))
+                                    }
+
+                                    <ServiceSelection routeInfos={reviews.searchQuery.routeInfos} paxInfo={reviews.searchQuery.paxInfo} tripInfos={reviews.tripInfos} />
                                     <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
                                         <p className="text-black text-md border-b border-gray-400">Select Seats (optional)</p>
                                         <div className="div flex justify-between py-3">
@@ -137,28 +127,27 @@ const AddPassengerDetails = () => {
                                         <div className="w-full bg-white py-3">
                                             <p className="text-gray-400 text-sm">to claim credit of GST charged by airlines. please enter your company GST number</p>
                                             <div className="flex py-3">
-                                                 <div>
+                                                <div>
                                                     <label htmlFor="" className="text-sm">Registration Number</label>
-                                                    <input type="text" className="border-b border-gary-900 text-sm outline-none w-full"/>
-                                                 </div>
-                                                 <div>
+                                                    <input type="text" className="border-b border-gary-900 text-sm outline-none w-full" />
+                                                </div>
+                                                <div>
                                                     <label htmlFor="" className="text-sm">Registered company name</label>
-                                                    <input type="text" className="border-b border-gary-900 text-sm outline-none w-full"/>
-                                                 </div>
-                                                 <div>
+                                                    <input type="text" className="border-b border-gary-900 text-sm outline-none w-full" />
+                                                </div>
+                                                <div>
                                                     <label htmlFor="" className="text-sm">Registered Email</label>
-                                                    <input type="text" className="border-b border-gary-900 text-sm outline-none w-full"/>
-                                                 </div>
-                                                 <div>
+                                                    <input type="text" className="border-b border-gary-900 text-sm outline-none w-full" />
+                                                </div>
+                                                <div>
                                                     <label htmlFor="" className="text-sm">Registered phone Number</label>
-                                                    <input type="number" className="border-b border-gary-900 text-sm outline-none w-full"/>
-                                                 </div>
+                                                    <input type="number" className="border-b border-gary-900 text-sm outline-none w-full" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
                                 </div>
-
                             </div>
                         </div>
                         <div className="col-span-3">

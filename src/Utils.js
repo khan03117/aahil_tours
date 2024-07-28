@@ -51,4 +51,5 @@ export const PRICE_VALIDATE = "https://apitest.tripjack.com/oms/v1/air/fare-vali
 export const BOOK_DETAILS = "https://apitest.tripjack.com/oms/v1/booking-details";
 export const SEAT = "https://apitest.tripjack.com/fms/v1/seat";
 export const USER_DETAILS = "https://apitest.tripjack.com/ums/v1/user-detail";
+export const classes = "w-full border-b border-blue-gray-400 outline-none text-sm p-2 text-gray-600";
 
