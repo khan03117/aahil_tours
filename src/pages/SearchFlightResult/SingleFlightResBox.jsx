@@ -12,9 +12,8 @@ import { Radio } from '@material-tailwind/react'
 import axios from 'axios'
 import { FAIR_RULE, token } from '../../Utils'
 import FareRule from './FareRule'
-import { Link } from 'react-router-dom'
 
-const SingleFlightResBox = ({ flight, paxinfo }) => {
+const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
     const [view, setView] = React.useState('');
     const [show, setShow] = useState(false);
     const [fairRule, setFairRule] = useState([]);
@@ -27,7 +26,7 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
         setShow(!show);
         getFareRule(id);
         setView('Flight Details');
-        
+
     }
     const si = flight.sI;
     const pricelist = flight.totalPriceList;
@@ -68,15 +67,22 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
         });
         setFairRule(item.data);
     }
-    
+
     useEffect(() => {
         setPriceIndex(0);
-        if(pricelist.length > 0){
+        if (pricelist.length > 0) {
             setPrice_id(pricelist[0].id)
         }
-      
+
     }, []);
-    if(!flight){
+    useEffect(() => {
+        if (price_id) {
+            handlepid(price_id)
+        }
+    }, [price_id]);
+
+
+    if (!flight) {
         return false;
     }
     return (
@@ -94,7 +100,7 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                     <div className="col-span-1">
                         <div className="grid grid-cols-6 relative">
                             <div className="absolute text-xs text-center top-[10%] translate-x-[-50%] left-[28%]  w-10 h-1 border-t border-blue-gray-500">
-                                {stops+1} stops
+                                {stops + 1} stops
                             </div>
                             <div className="col-span-1">
                                 <div className="w-full flex gap-3 items-center">
@@ -132,8 +138,8 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                                             <>
                                                 <div className="block">
                                                     <div className="flex items-center">
-                                                        
-                                                        <Radio checked={priceindex == idx ? 'checked' : false} onClick={() => getFareRule(plist.id)} label={
+
+                                                        <Radio name={name} checked={priceindex == idx ? 'checked' : false} onClick={() => getFareRule(plist.id)} label={
                                                             <>
                                                                 <p className='font-bold text-xl text-red-600'>{countPrice(plist.id)}</p>
                                                                 <div className="flex gap-2 flex-wrap items-center text-[12px]">
@@ -151,7 +157,7 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                                                                     </span>
                                                                 </div>
                                                             </>
-                                                        }  value={plist.id} />
+                                                        } value={plist.id} />
                                                     </div>
                                                 </div>
 
@@ -163,7 +169,7 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                             </div>
                             <div className="col-span-1">
                                 <div className="w-full">
-                                    <Link to={'/review/'+price_id} className='font-bold text-sm block text-nowrap  text-white bg-orange-800 px-4 py-1 rounded-full'>BOOK NOW</Link>
+                                    {/* <Link to={'/review/'+price_id} className='font-bold text-sm block text-nowrap  text-white bg-orange-800 px-4 py-1 rounded-full'>BOOK NOW</Link> */}
                                     <div className="flex mt-2 gap-2">
                                         <div className='icon'>
                                             <img src={seat} alt='image'></img>
@@ -217,7 +223,7 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
                                             </div>
                                             {view === "Flight Details" && <FlightDetails flights={si} />}
                                             {view === "Fare Details" && <FareDetails id={price_id} pricelist={pricelist} paxinfo={paxinfo} rule={fairRule} />}
-                                            {view === "Fare Rules" && <FareRule rule={fairRule} />}
+                                            {view === "Fare Rules" && fairRule && <FareRule rule={fairRule} />}
                                             {view === "Baggage Information" && <BaggageInformation />}
 
                                         </div>
@@ -234,7 +240,9 @@ const SingleFlightResBox = ({ flight, paxinfo }) => {
 
 SingleFlightResBox.propTypes = {
     flight: PropTypes.object.isRequired,
-    paxinfo: PropTypes.object
+    paxinfo: PropTypes.object,
+    name: PropTypes.string,
+    handlepid: PropTypes.func
 }
 
 
