@@ -2,27 +2,33 @@ import React from 'react'
 
 import { ArrowRightOutlined, CloseOutlined } from "@ant-design/icons"
 import { useLocation } from "react-router-dom"
-import ServiceSelection from "./ServiceSelection";
+import ServiceSelection from "../passengerDetails/ServiceSelection";
 import AddDetails from "../passengerDetails/AddDetails";
+import DeliveryInfo from '../passengerDetails/DeliveryInfo';
+import GstDetails from '../passengerDetails/GstDetails';
 
 const AddPassengerDetails = () => {
     const { state } = useLocation();
     const { reviews } = state;
+    
     const [pinfo, setPinfo] = React.useState([]);
+    const [smeals, setSmeals] = React.useState([]);
     const handlePinfo = (obj) => {
         setPinfo([...pinfo, obj]);
     }
 
     const totalPax = reviews.searchQuery.paxInfo;
+    const conditions = reviews.conditions;
+
     const totalarray = Object.entries(totalPax).flatMap(([type, count]) =>
         Array(count).fill(type)
     );
-    console.log(totalarray)
-
+    // const tripInfos = reviews.tripInfos;
+    // const routeInfos = reviews.searchQuery.routeInfos;
 
     React.useEffect(() => {
-        console.log(pinfo);
-    }, [pinfo]);
+        console.log([pinfo, smeals]);
+    }, [pinfo, smeals]);
     return (
         <>
             <section className="py-5 bg-gray-50">
@@ -33,19 +39,14 @@ const AddPassengerDetails = () => {
                                 <h1 className="text-xl">Passenger Details</h1>
                                 <div className="w-full bg-white border border-gray p-2  rounded-md">
                                     {
-
-
                                         [...totalarray].map((a, index) => (
                                             <>
-
-
                                                 {
                                                     pinfo.length >= index && (
                                                         <>
                                                             {
                                                                 pinfo.length > index ? (<>
                                                                     <p className="text-black text-md border-b border-gray-400">{a} {index + 1} : </p>
-
                                                                     {
                                                                         Object.entries(pinfo[index]).map(([k, v]) => (
                                                                             <>
@@ -55,31 +56,30 @@ const AddPassengerDetails = () => {
                                                                             </>
                                                                         ))
                                                                     }
-
                                                                 </>) : (<>
                                                                     <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
                                                                         <p className="text-black text-md border-b border-gray-400">{a} {index + 1} : </p>
                                                                         <div className="w-full bg-white py-3  px-2">
-                                                                            <AddDetails id={index} show={index == pinfo.length ? true : false} onsubmit={handlePinfo} type={a} />
+                                                                            <AddDetails conditions={conditions} id={index} show={index == pinfo.length ? true : false} onsubmit={handlePinfo} type={a} />
                                                                         </div>
                                                                     </div>
-
                                                                 </>)
                                                             }
-
                                                         </>
                                                     )
                                                 }
-
-
 
                                             </>
                                         ))
                                     }
 
-                                    <ServiceSelection routeInfos={reviews.searchQuery.routeInfos} paxInfo={reviews.searchQuery.paxInfo} tripInfos={reviews.tripInfos} />
+                                    <ServiceSelection pinfo={pinfo} mealsave={setSmeals} routeInfos={reviews.searchQuery.routeInfos} paxInfo={reviews.searchQuery.paxInfo} tripInfos={reviews.tripInfos} />
                                     <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
                                         <p className="text-black text-md border-b border-gray-400">Select Seats (optional)</p>
+                                        {
+                                            conditions.isa ? (
+                                                <>
+                                                
                                         <div className="div flex justify-between py-3">
                                             <div className="text">
                                                 <p className="text-black text-sm">Bangalore<ArrowRightOutlined />Mumbai</p>
@@ -94,25 +94,18 @@ const AddPassengerDetails = () => {
                                             </div>
                                             <button className="text-white bg-primary px-2 py-2 text-sm rounded-lg">Show Seat Map</button>
                                         </div>
+                                        </>
+                                            ) : (
+                                                <>
+                                                    <p className='text-yellow-900 text-sm py-3'>No seat map Available</p>
+                                                </>
+                                            )
+                                        }
                                     </div>
                                     <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
                                         <p className="text-black text-md border-b border-gray-400">Contact Details</p>
-                                        <div className="w-full bg-white flex justify-between py-5">
-                                            <div className="div">
-                                                <label htmlFor="" className="block text-sm text-gray-400 w-full">Country code</label>
-                                                <select id="select_box" name="select_box" className="border-b border-gary-600 text-sm outline-none w-full">
-                                                    <option value="option1">India (+91)</option>
-                                                </select>
-                                            </div>
-                                            <div className="div">
-                                                <label htmlFor="" className="block text-sm text-gray-400">Mobile Number</label>
-                                                <input type="number" className="border-b border-gary-600 text-sm outline-none w-full" />
-                                            </div>
-                                            <div className="div">
-                                                <label htmlFor="" className="block text-sm text-gray-400">Email ID</label>
-                                                <input type="text" className="border-b border-gary-600 text-sm outline-none w-full" />
-                                            </div>
-                                        </div>
+
+                                        <DeliveryInfo />
                                     </div>
                                     <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
                                         <p className="text-black text-md border-b border-gray-400">GST Number for Bussiness Travel</p>
@@ -126,24 +119,7 @@ const AddPassengerDetails = () => {
                                         </div>
                                         <div className="w-full bg-white py-3">
                                             <p className="text-gray-400 text-sm">to claim credit of GST charged by airlines. please enter your company GST number</p>
-                                            <div className="flex py-3">
-                                                <div>
-                                                    <label htmlFor="" className="text-sm">Registration Number</label>
-                                                    <input type="text" className="border-b border-gary-900 text-sm outline-none w-full" />
-                                                </div>
-                                                <div>
-                                                    <label htmlFor="" className="text-sm">Registered company name</label>
-                                                    <input type="text" className="border-b border-gary-900 text-sm outline-none w-full" />
-                                                </div>
-                                                <div>
-                                                    <label htmlFor="" className="text-sm">Registered Email</label>
-                                                    <input type="text" className="border-b border-gary-900 text-sm outline-none w-full" />
-                                                </div>
-                                                <div>
-                                                    <label htmlFor="" className="text-sm">Registered phone Number</label>
-                                                    <input type="number" className="border-b border-gary-900 text-sm outline-none w-full" />
-                                                </div>
-                                            </div>
+                                            <GstDetails />
                                         </div>
                                     </div>
 
@@ -191,5 +167,7 @@ const AddPassengerDetails = () => {
         </>
     )
 }
+
+
 
 export default AddPassengerDetails
