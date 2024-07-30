@@ -3,18 +3,17 @@
         {
             "sI": [
                 {
-                    "id": "407",
+                    "id": "533",
                     "fD": {
                         "aI": {
-                            "code": "UK",
-                            "name": "Vistara",
+                            "code": "AI",
+                            "name": "Air India",
                             "isLcc": false
                         },
-                        "fN": "747",
+                        "fN": "624",
                         "eT": "320"
                     },
                     "stops": 0,
-                    "so": [],
                     "duration": 130,
                     "da": {
                         "code": "DEL",
@@ -26,15 +25,16 @@
                         "terminal": "Terminal 3"
                     },
                     "aa": {
-                        "code": "CCU",
-                        "name": "Netaji Subhas Chandra Bose Intl",
-                        "cityCode": "CCU",
-                        "city": "Kolkata",
+                        "code": "BOM",
+                        "name": "Chhatrapati Shivaji",
+                        "cityCode": "BOM",
+                        "city": "Mumbai",
                         "country": "India",
-                        "countryCode": "IN"
+                        "countryCode": "IN",
+                        "terminal": "Terminal 2"
                     },
-                    "dt": "2024-07-26T06:15",
-                    "at": "2024-07-26T08:25",
+                    "dt": "2024-07-31T19:10",
+                    "at": "2024-07-31T21:20",
                     "iand": false,
                     "isRs": false,
                     "sN": 0,
@@ -42,147 +42,110 @@
                         "MEAL": [
                             {
                                 "code": "VGML",
-                                "amount": 0,
                                 "desc": "Vegan Veg Meal"
                             },
                             {
                                 "code": "AVML",
-                                "amount": 0,
                                 "desc": "Hindu Veg Meal"
                             },
                             {
                                 "code": "VJML",
-                                "amount": 0,
                                 "desc": "Jain Veg Meal"
                             },
                             {
                                 "code": "VLML",
-                                "amount": 0,
                                 "desc": "Lacto-Ovo Veg Meal"
                             },
                             {
                                 "code": "FPML",
-                                "amount": 0,
                                 "desc": "Fruit Platter Meal"
                             },
                             {
-                                "code": "NVML",
-                                "amount": 0,
-                                "desc": "Non-Veg Meal"
-                            },
-                            {
                                 "code": "MOML",
-                                "amount": 0,
                                 "desc": "Moslem Meal"
                             },
                             {
                                 "code": "HNML",
-                                "amount": 0,
                                 "desc": "Hindu Non-Veg Meal"
                             },
                             {
                                 "code": "SFML",
-                                "amount": 0,
                                 "desc": "Sea Food Meal"
                             },
                             {
                                 "code": "DBML",
-                                "amount": 0,
                                 "desc": "Diabetic Meal"
                             },
                             {
                                 "code": "NLML",
-                                "amount": 0,
                                 "desc": "Low Lactose Meal"
                             },
                             {
                                 "code": "CHML",
-                                "amount": 0,
                                 "desc": "Child Meal"
                             },
                             {
                                 "code": "BBML",
-                                "amount": 0,
                                 "desc": "Baby Meal"
                             },
                             {
                                 "code": "BLML",
-                                "amount": 0,
                                 "desc": "Bland Meal"
                             },
                             {
                                 "code": "GFML",
-                                "amount": 0,
                                 "desc": "Gluten Intolerant Meal"
                             },
                             {
                                 "code": "KSML",
-                                "amount": 0,
                                 "desc": "Kosher Meal"
                             },
                             {
                                 "code": "LCML",
-                                "amount": 0,
                                 "desc": "Low Calorie Meal"
                             },
                             {
                                 "code": "LFML",
-                                "amount": 0,
                                 "desc": "Low Fat Meal"
                             },
                             {
                                 "code": "LSML",
-                                "amount": 0,
                                 "desc": "ow Salt Meal"
                             },
                             {
                                 "code": "RVML",
-                                "amount": 0,
                                 "desc": "Vegetarian Raw Meal"
                             },
                             {
                                 "code": "VOML",
-                                "amount": 0,
                                 "desc": "Vegetarian Oriental Meal"
                             },
                             {
-                                "code": "SPML",
-                                "amount": 0,
-                                "desc": "Special Meal"
-                            },
-                            {
                                 "code": "PFML",
-                                "amount": 0,
                                 "desc": "Peanut Free Meal"
                             },
                             {
                                 "code": "ORML",
-                                "amount": 0,
                                 "desc": "Oriental Meal"
                             },
                             {
                                 "code": "NSML",
-                                "amount": 0,
                                 "desc": "No Salt Meal"
                             },
                             {
                                 "code": "PRML",
-                                "amount": 0,
                                 "desc": "Low Purine Meal"
                             },
                             {
                                 "code": "LPML",
-                                "amount": 0,
                                 "desc": "Low Protein Meal"
                             },
                             {
                                 "code": "HFML",
-                                "amount": 0,
                                 "desc": "High Fiber Meal"
                             },
                             {
                                 "code": "NFML",
-                                "amount": 0,
                                 "desc": "No Fish Meal"
                             }
                         ]
@@ -195,32 +158,314 @@
                     "fd": {
                         "ADULT": {
                             "fC": {
-                                "TAF": 792,
-                                "BF": 5312,
-                                "NF": 6104,
-                                "TF": 6104
+                                "TF": 16507,
+                                "BF": 15180,
+                                "NF": 16507,
+                                "TAF": 1327
                             },
                             "afC": {
                                 "TAF": {
-                                    "YR": 130,
-                                    "AGST": 273,
-                                    "OT": 389
+                                    "OT": 389,
+                                    "AGST": 768,
+                                    "YR": 170
                                 }
                             },
-                            "sR": 2,
                             "bI": {
-                                "iB": "1PC",
+                                "iB": "25 Kg (01 Piece only)",
                                 "cB": "7 Kg"
                             },
                             "rT": 1,
                             "cc": "ECONOMY",
-                            "cB": "E",
-                            "fB": "E0GRPRYL",
+                            "cB": "M",
+                            "fB": "MIP",
+                            "mI": true
+                        },
+                        "CHILD": {
+                            "fC": {
+                                "TF": 14913,
+                                "BF": 13662,
+                                "NF": 14913,
+                                "TAF": 1251
+                            },
+                            "afC": {
+                                "TAF": {
+                                    "OT": 389,
+                                    "AGST": 692,
+                                    "YR": 170
+                                }
+                            },
+                            "bI": {
+                                "iB": "25 Kg (01 Piece only)",
+                                "cB": "7 Kg"
+                            },
+                            "rT": 1,
+                            "cc": "ECONOMY",
+                            "cB": "M",
+                            "fB": "MIP",
                             "mI": true
                         }
                     },
                     "fareIdentifier": "PUBLISHED",
-                    "id": "R15-2-10-4862378576_0DELCCUUK747~8368833048033453",
+                    "id": "R15-2-10-9157026384_0DELBOMAI624~8747928248747517",
+                    "messages": [],
+                    "pc": {
+                        "code": "AI",
+                        "name": "Air India",
+                        "isLcc": false
+                    },
+                    "fareRuleInformation": {
+                        "fr": {},
+                        "tfr": {
+                            "NO_SHOW": [
+                                {
+                                    "policyInfo": "INR 3,000/- If cancelled less than 2 Hours before departure",
+                                    "st": "0",
+                                    "et": "8760"
+                                }
+                            ],
+                            "DATECHANGE": [
+                                {
+                                    "amount": 0,
+                                    "policyInfo": "+ Fare Difference__nls__Changes permitted 02 Hrs before scheduled departure",
+                                    "fcs": {
+                                        "ARF": 0,
+                                        "ARFT": 0
+                                    },
+                                    "st": "4",
+                                    "et": "8760"
+                                }
+                            ],
+                            "CANCELLATION": [
+                                {
+                                    "amount": 0,
+                                    "policyInfo": "__nls__Cancellation permitted 02 Hrs before schedule departure",
+                                    "fcs": {
+                                        "ACFT": 0,
+                                        "ACF": 0
+                                    },
+                                    "st": "4",
+                                    "et": "8760"
+                                }
+                            ],
+                            "SEAT_CHARGEABLE": [
+                                {
+                                    "policyInfo": "",
+                                    "st": "0",
+                                    "et": "8760"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "sI": [
+                {
+                    "id": "659",
+                    "fD": {
+                        "aI": {
+                            "code": "UK",
+                            "name": "Vistara",
+                            "isLcc": false
+                        },
+                        "fN": "988",
+                        "eT": "320"
+                    },
+                    "stops": 0,
+                    "duration": 135,
+                    "da": {
+                        "code": "BOM",
+                        "name": "Chhatrapati Shivaji",
+                        "cityCode": "BOM",
+                        "city": "Mumbai",
+                        "country": "India",
+                        "countryCode": "IN",
+                        "terminal": "Terminal 2"
+                    },
+                    "aa": {
+                        "code": "DEL",
+                        "name": "Delhi Indira Gandhi Intl",
+                        "cityCode": "DEL",
+                        "city": "Delhi",
+                        "country": "India",
+                        "countryCode": "IN",
+                        "terminal": "Terminal 3"
+                    },
+                    "dt": "2024-08-02T20:40",
+                    "at": "2024-08-02T22:55",
+                    "iand": false,
+                    "isRs": true,
+                    "sN": 0,
+                    "ssrInfo": {
+                        "MEAL": [
+                            {
+                                "code": "VGML",
+                                "desc": "Vegan Veg Meal"
+                            },
+                            {
+                                "code": "AVML",
+                                "desc": "Hindu Veg Meal"
+                            },
+                            {
+                                "code": "VJML",
+                                "desc": "Jain Veg Meal"
+                            },
+                            {
+                                "code": "VLML",
+                                "desc": "Lacto-Ovo Veg Meal"
+                            },
+                            {
+                                "code": "FPML",
+                                "desc": "Fruit Platter Meal"
+                            },
+                            {
+                                "code": "MOML",
+                                "desc": "Moslem Meal"
+                            },
+                            {
+                                "code": "HNML",
+                                "desc": "Hindu Non-Veg Meal"
+                            },
+                            {
+                                "code": "SFML",
+                                "desc": "Sea Food Meal"
+                            },
+                            {
+                                "code": "DBML",
+                                "desc": "Diabetic Meal"
+                            },
+                            {
+                                "code": "NLML",
+                                "desc": "Low Lactose Meal"
+                            },
+                            {
+                                "code": "CHML",
+                                "desc": "Child Meal"
+                            },
+                            {
+                                "code": "BBML",
+                                "desc": "Baby Meal"
+                            },
+                            {
+                                "code": "BLML",
+                                "desc": "Bland Meal"
+                            },
+                            {
+                                "code": "GFML",
+                                "desc": "Gluten Intolerant Meal"
+                            },
+                            {
+                                "code": "KSML",
+                                "desc": "Kosher Meal"
+                            },
+                            {
+                                "code": "LCML",
+                                "desc": "Low Calorie Meal"
+                            },
+                            {
+                                "code": "LFML",
+                                "desc": "Low Fat Meal"
+                            },
+                            {
+                                "code": "LSML",
+                                "desc": "ow Salt Meal"
+                            },
+                            {
+                                "code": "RVML",
+                                "desc": "Vegetarian Raw Meal"
+                            },
+                            {
+                                "code": "VOML",
+                                "desc": "Vegetarian Oriental Meal"
+                            },
+                            {
+                                "code": "PFML",
+                                "desc": "Peanut Free Meal"
+                            },
+                            {
+                                "code": "ORML",
+                                "desc": "Oriental Meal"
+                            },
+                            {
+                                "code": "NSML",
+                                "desc": "No Salt Meal"
+                            },
+                            {
+                                "code": "PRML",
+                                "desc": "Low Purine Meal"
+                            },
+                            {
+                                "code": "LPML",
+                                "desc": "Low Protein Meal"
+                            },
+                            {
+                                "code": "HFML",
+                                "desc": "High Fiber Meal"
+                            },
+                            {
+                                "code": "NFML",
+                                "desc": "No Fish Meal"
+                            }
+                        ]
+                    },
+                    "ac": []
+                }
+            ],
+            "totalPriceList": [
+                {
+                    "fd": {
+                        "ADULT": {
+                            "fC": {
+                                "TF": 16472,
+                                "BF": 15220,
+                                "NF": 16472,
+                                "TAF": 1252
+                            },
+                            "afC": {
+                                "TAF": {
+                                    "OT": 354,
+                                    "AGST": 768,
+                                    "YR": 130
+                                }
+                            },
+                            "bI": {
+                                "iB": "15KG",
+                                "cB": "7 Kg"
+                            },
+                            "rT": 1,
+                            "cc": "ECONOMY",
+                            "cB": "A",
+                            "fB": "AL1PYS",
+                            "mI": true
+                        },
+                        "CHILD": {
+                            "fC": {
+                                "TF": 16472,
+                                "BF": 15220,
+                                "NF": 16472,
+                                "TAF": 1252
+                            },
+                            "afC": {
+                                "TAF": {
+                                    "OT": 354,
+                                    "AGST": 768,
+                                    "YR": 130
+                                }
+                            },
+                            "bI": {
+                                "iB": "15KG",
+                                "cB": "7 Kg"
+                            },
+                            "rT": 1,
+                            "cc": "ECONOMY",
+                            "cB": "A",
+                            "fB": "AL1PYS",
+                            "mI": true
+                        }
+                    },
+                    "fareIdentifier": "PUBLISHED",
+                    "id": "R15-2-10-9157026384_1BOMDELUK988~8747928250641691",
                     "messages": [],
                     "pc": {
                         "code": "UK",
@@ -242,8 +487,8 @@
                                     "amount": 3920,
                                     "policyInfo": "+ Fare Difference __nls__Changes permitted 04 Hrs before scheduled departure",
                                     "fcs": {
-                                        "ARFT": 0,
-                                        "ARF": 3920
+                                        "ARF": 3920,
+                                        "ARFT": 0
                                     },
                                     "st": "4",
                                     "et": "8760"
@@ -274,6 +519,13 @@
             ]
         }
     ],
+    "alerts": [
+        {
+            "oldFare": 91043,
+            "newFare": 97343,
+            "type": "FAREALERT"
+        }
+    ],
     "searchQuery": {
         "routeInfos": [
             {
@@ -286,33 +538,33 @@
                     "countryCode": "IN"
                 },
                 "toCityOrAirport": {
-                    "code": "CCU",
-                    "name": "Netaji Subhas Chandra Bose Intl",
-                    "cityCode": "CCU",
-                    "city": "Kolkata",
+                    "code": "BOM",
+                    "name": "Chhatrapati Shivaji",
+                    "cityCode": "BOM",
+                    "city": "Mumbai",
                     "country": "India",
                     "countryCode": "IN"
                 },
-                "travelDate": "2024-07-26"
+                "travelDate": "2024-07-31"
             },
             {
                 "fromCityOrAirport": {
-                    "code": "Kolkata",
+                    "code": "BOM",
+                    "name": "Chhatrapati Shivaji",
+                    "cityCode": "BOM",
+                    "city": "Mumbai",
+                    "country": "India",
+                    "countryCode": "IN"
+                },
+                "toCityOrAirport": {
+                    "code": "DEL",
                     "name": "Delhi Indira Gandhi Intl",
                     "cityCode": "DEL",
                     "city": "Delhi",
                     "country": "India",
                     "countryCode": "IN"
                 },
-                "toCityOrAirport": {
-                    "code": "CCU",
-                    "name": "Netaji Subhas Chandra Bose Intl",
-                    "cityCode": "CCU",
-                    "city": "Delhi",
-                    "country": "India",
-                    "countryCode": "IN"
-                },
-                "travelDate": "2024-07-26"
+                "travelDate": "2024-08-02"
             }
         ],
         "cabinClass": "ECONOMY",
@@ -321,8 +573,8 @@
             "CHILD": 1,
             "INFANT": 0
         },
-        "requestId": "4862378576",
-        "searchType": "ONEWAY",
+        "requestId": "9157026384",
+        "searchType": "RETURN",
         "searchModifiers": {
             "pft": "REGULAR",
             "pfts": [
@@ -331,20 +583,20 @@
         },
         "isDomestic": true
     },
-    "bookingId": "TJS106701026189",
+    "bookingId": "TJS108001029939",
     "totalPriceInfo": {
         "totalFareDetail": {
             "fC": {
-                "TAF": 792,
-                "BF": 5312,
-                "NF": 6104,
-                "TF": 6104
+                "TF": 97343,
+                "BF": 89682,
+                "NF": 97343,
+                "TAF": 7661
             },
             "afC": {
                 "TAF": {
-                    "YR": 130,
-                    "AGST": 273,
-                    "OT": 389
+                    "OT": 2229,
+                    "AGST": 4532,
+                    "YR": 900
                 }
             }
         }
@@ -355,9 +607,10 @@
     },
     "conditions": {
         "ffas": [
-            "UK"
+            "UK",
+            "AI"
         ],
-        "isa": false,
+        "isa": true,
         "dob": {
             "adobr": false,
             "cdobr": false,
@@ -373,8 +626,8 @@
             "isbpa": false
         },
         "isBA": true,
-        "st": 900,
-        "sct": "2024-07-25T22:23:39.070",
+        "st": 780,
+        "sct": "2024-07-30T07:41:54.268",
         "gst": {
             "gstappl": true,
             "igm": false

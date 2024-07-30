@@ -139,7 +139,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                                 <div className="block">
                                                     <div className="flex items-center">
 
-                                                        <Radio name={name} checked={priceindex == idx ? 'checked' : false} onClick={() => getFareRule(plist.id)} label={
+                                                        <Radio data-name={name} checked={priceindex == idx ? 'checked' : false} onClick={() => getFareRule(plist.id)} label={
                                                             <>
                                                                 <p className='font-bold text-xl text-red-600'>{countPrice(plist.id)}</p>
                                                                 <div className="flex gap-2 flex-wrap items-center text-[12px]">

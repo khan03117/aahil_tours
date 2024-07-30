@@ -35,16 +35,10 @@ const FareDetailsTable = ({ passengerCount, totalPriceList }) => {
     }, 0);
 
     return (
-        <table border="1" cellPadding="10" cellSpacing="0" className='w-full text-start'>
-            <thead>
-                <tr className='*:p-2 *:text-sm *:border *:border-blue-gray-200 *:text-start'>
-                    <th>Passenger Type</th>
-                    <th>Fare</th>
-                </tr>
-            </thead>
+        <table border="1" cellPadding="10" cellSpacing="0" className='w-full table-fixed text-start'>
             <tbody>
                 {rows}
-                <tr className='*:p-2 *:text-sm *:border *:border-blue-gray-200 *:text-start'>
+                <tr className='*:p-2 *:text-sm *:border *:border-blue-gray-200 *:border-b-0 *:text-start'>
                     <td>Total (Base Fare)</td>
                     <td>₹ {totalBaseFare}</td>
                 </tr>

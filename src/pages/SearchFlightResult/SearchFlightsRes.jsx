@@ -5,12 +5,14 @@ import Filter from "./Filter"
 import SingleFlightResBox from "./SingleFlightResBox"
 import { SEARCH } from "../../Utils";
 import airplane from '../../assets/airplane.gif';
+import { useNavigate } from 'react-router-dom';
 
 
 const SearchFlightsRes = () => {
     const [onwards, setOnwards] = React.useState([]);
     const [returns, setReturns] = React.useState([]);
     const [comobs, setCombos] = React.useState([]);
+    const [multies, setMulties] = React.useState({});
     const [isInternational, setInternational] = React.useState(false);
     const searchdata = localStorage.getItem('search');
     const { data, trip } = JSON.parse(searchdata);
@@ -18,6 +20,7 @@ const SearchFlightsRes = () => {
     const [rpid, setRpid] = React.useState('');
     const [allow, setAllow] = React.useState(false);
     const [isloading, setIsLoading] = React.useState(false);
+    const navigate = useNavigate();
     const set_allow = () => {
         if (trip == 1 && pid) {
             setAllow(true);
@@ -48,15 +51,11 @@ const SearchFlightsRes = () => {
             setOnwards(tripInfos.ONWARD || []);
             setReturns(tripInfos.RETURN || []);
         } else if (trip === 3 && isInternational) {
+            console.log('trip 3 and internationl')
             setCombos(tripInfos.COMBO || []);
         } else if (trip === 3) {
-            // Handle Domestic Multi-City
-            // Assuming searchResult contains equivalent number of route infos
-            const multiCityResults = searchResult.routeInfos.map((info, index) => ({
-                id: index + 1,
-                ...info
-            }));
-            setOnwards(multiCityResults);
+            console.log('trip 3 and !internationl')
+            setMulties(tripInfos);
         }
         setIsLoading(false)
     }
@@ -64,9 +63,24 @@ const SearchFlightsRes = () => {
         setInternational(false);
         searchFlight();
         console.log(comobs);
-    }, []);
+    }, [comobs]);
+    React.useEffect(() => {
+        console.log(multies);
+    }, [multies]);
     if (!data.searchQuery.paxInfo) {
         return <div>Loading...</div>
+    }
+    const bookflight = () => {
+        if (allow) {
+            let ids = pid;
+            if (rpid) {
+                ids = ids + ',' + rpid;
+            }
+
+            navigate('/review/' + ids);
+        } else {
+            alert('No allowed')
+        }
     }
 
     return (
@@ -107,7 +121,7 @@ const SearchFlightsRes = () => {
                                                         <div className="col-span-1">
                                                             {
 
-                                                                trip != 3 && (
+                                                                (
                                                                     <>
                                                                         {
                                                                             onwards.map((flight) => (
@@ -142,8 +156,7 @@ const SearchFlightsRes = () => {
                                     <>
                                         <section className="fixed z-[109999] bottom-0 start-0 w-full bg-primary p-4">
                                             <div className="flex justify-between">
-                                                <span></span>
-                                                <button className="bg-white text-primary px-4 py-2 rounded shadow-sm shadow-white/40">Book Now</button>
+                                                <button onClick={bookflight} className="bg-white text-primary px-4 py-2 rounded shadow-sm shadow-white/40">Book Now</button>
                                             </div>
                                         </section>
                                     </>

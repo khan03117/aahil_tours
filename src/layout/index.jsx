@@ -1,6 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid';
+import AppHeader from './AppHeader';
 const Layout = () => {
 
   const setAppid = () => {
@@ -15,6 +16,7 @@ const Layout = () => {
   }, []);
   return (
     <>
+      <AppHeader/>
       {<Outlet />}
     </>
   )
