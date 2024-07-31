@@ -1,7 +1,7 @@
 //import React from 'react'
 import vistara from '../../assets/vistara.png'
-
-const BaggageInformation = () => {
+import PropTypes from 'prop-types';
+const BaggageInformation = ({bI}) => {
     return (
         <>
             <div className="col-span-1">
@@ -28,8 +28,8 @@ const BaggageInformation = () => {
 
                                     </div>
                                 </td>
-                                <td className="">15kgs</td>
-                                <td className="">7kg</td>
+                                <td className="">{bI && bI.cB}</td>
+                                <td className="">{bI && bI.iB}</td>
                             </tr>
 
                         </tbody>
@@ -45,5 +45,10 @@ const BaggageInformation = () => {
         </>
     )
 }
+BaggageInformation.propTypes = {
+   
+    bI: PropTypes.object
+}
+
 
 export default BaggageInformation

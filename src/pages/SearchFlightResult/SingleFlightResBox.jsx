@@ -224,7 +224,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                             {view === "Flight Details" && <FlightDetails flights={si} />}
                                             {view === "Fare Details" && <FareDetails id={price_id} pricelist={pricelist} paxinfo={paxinfo} rule={fairRule} />}
                                             {view === "Fare Rules" && fairRule && <FareRule rule={fairRule} />}
-                                            {view === "Baggage Information" && <BaggageInformation />}
+                                            {view === "Baggage Information" && <BaggageInformation bI={pricelist.find(obj => obj.id == price_id)?.fd.ADULT.bI} />}
 
                                         </div>
                                     </div>

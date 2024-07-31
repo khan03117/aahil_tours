@@ -6,6 +6,7 @@ import SingleFlightResBox from "./SingleFlightResBox"
 import { SEARCH } from "../../Utils";
 import airplane from '../../assets/airplane.gif';
 import { useNavigate } from 'react-router-dom';
+import { ArrowRightOutlined } from '@ant-design/icons';
 
 
 const SearchFlightsRes = () => {
@@ -20,6 +21,7 @@ const SearchFlightsRes = () => {
     const [rpid, setRpid] = React.useState('');
     const [allow, setAllow] = React.useState(false);
     const [isloading, setIsLoading] = React.useState(false);
+    const [routeid, setRouteId] = React.useState(0);
     const navigate = useNavigate();
     const set_allow = () => {
         if (trip == 1 && pid) {
@@ -54,7 +56,7 @@ const SearchFlightsRes = () => {
             console.log('trip 3 and internationl')
             setCombos(tripInfos.COMBO || []);
         } else if (trip === 3) {
-            console.log('trip 3 and !internationl')
+            console.log(tripInfos)
             setMulties(tripInfos);
         }
         setIsLoading(false)
@@ -67,6 +69,7 @@ const SearchFlightsRes = () => {
     React.useEffect(() => {
         console.log(multies);
     }, [multies]);
+
     if (!data.searchQuery.paxInfo) {
         return <div>Loading...</div>
     }
@@ -88,8 +91,8 @@ const SearchFlightsRes = () => {
             {
                 isloading ? (
                     <>
-                        <div className='p-10'>
-                            <img src={airplane} alt="" className="max-w-full" />
+                        <div className='p-10 text-center'>
+                            <img src={airplane} alt="" className="max-w-full mx-auto inline-block" />
                         </div>
                     </>
                 )
@@ -117,6 +120,17 @@ const SearchFlightsRes = () => {
                                                     }
                                                 </div>
                                                 <div className="w-full">
+                                                    {
+                                                        [...data.searchQuery.routeInfos].map((route, index) => (
+                                                            <>
+                                                                <button onClick={() => setRouteId(index)}>
+                                                                    {route.fromCityOrAirport.code} <ArrowRightOutlined /> {route.toCityOrAirport.code}
+                                                                </button>
+                                                            </>
+                                                        ))
+
+
+                                                    }
                                                     <div className={`grid gap-2 ${trip == 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                                                         <div className="col-span-1">
                                                             {
@@ -143,6 +157,17 @@ const SearchFlightsRes = () => {
                                                                 ))
                                                             }
                                                         </div>
+                                                        <div className="col-span-1">
+                                                          {
+                                                            Object.values(multies)[routeid].map((flight) => (
+                                                                <>
+                                                                                    <SingleFlightResBox name="onwards" handlepid={setPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
+
+                                                                </>
+                                                            ))
+                                                          }
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>

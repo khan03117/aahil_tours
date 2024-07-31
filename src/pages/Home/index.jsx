@@ -38,8 +38,7 @@ const Home = () => {
     };
     const handleDecrement = (key) => {
         setTravellers((prev) => {
-            if (key === 'ADULT' && prev[key] <= 1) {
-                // Ensure the number of adults cannot be less than 1
+            if (key === 'ADULT' && prev[key] <= 1) {              
                 return prev;
             }
 
