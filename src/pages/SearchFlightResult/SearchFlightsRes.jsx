@@ -22,6 +22,15 @@ const SearchFlightsRes = () => {
     const [allow, setAllow] = React.useState(false);
     const [isloading, setIsLoading] = React.useState(false);
     const [routeid, setRouteId] = React.useState(0);
+    const [pids, setPids] = React.useState([]);
+    const setAllPid = (id) => {
+        const arr = [...pids];
+        let check = arr.find(elm => elm == id);
+        if (!check) {
+            arr.push(id);
+            setPids(arr);
+        }
+    }
     const navigate = useNavigate();
     const set_allow = () => {
         if (trip == 1 && pid) {
@@ -32,10 +41,15 @@ const SearchFlightsRes = () => {
                 setAllow(true);
             }
         }
+        if (trip == 3 && !isInternational) {
+            if (data.searchQuery.routeInfos.length == pids.length) {
+                setAllow(true);
+            }
+        }
     }
     React.useEffect(() => {
         set_allow();
-    }, [pid, rpid]);
+    }, [pid, rpid, pids]);
 
     const searchFlight = async () => {
         setIsLoading(true)
@@ -75,12 +89,19 @@ const SearchFlightsRes = () => {
     }
     const bookflight = () => {
         if (allow) {
-            let ids = pid;
-            if (rpid) {
-                ids = ids + ',' + rpid;
+            if (trip != 3) {
+                let ids = pid;
+                if (rpid) {
+                    ids = ids + ',' + rpid;
+                }
+
+                navigate('/review/' + ids);
+            }
+            if (trip == 3 && !isInternational) {
+                const allpids = pids.join(',');
+                navigate('/review/' + allpids);
             }
 
-            navigate('/review/' + ids);
         } else {
             alert('No allowed')
         }
@@ -121,16 +142,25 @@ const SearchFlightsRes = () => {
                                                 </div>
                                                 <div className="w-full">
                                                     {
+                                                        pids.map(itm => (
+                                                            <>
+                                                                <span className='me-5'>{itm}</span>
+                                                            </>
+                                                        ))
+                                                    }
+                                                    <div className="w-full flex gap-4 items-center *:text-nowrap *:text-sm" >                                                    
+                                                    {
                                                         [...data.searchQuery.routeInfos].map((route, index) => (
                                                             <>
-                                                                <button onClick={() => setRouteId(index)}>
+                                                                <button className={`p-2 ${routeid == index ? 'bg-primary text-white' : 'bg-gray-300 text-black' }`} onClick={() => setRouteId(index)}>
                                                                     {route.fromCityOrAirport.code} <ArrowRightOutlined /> {route.toCityOrAirport.code}
                                                                 </button>
                                                             </>
                                                         ))
-
-
                                                     }
+                                                    
+                                                    </div>
+                                                   
                                                     <div className={`grid gap-2 ${trip == 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                                                         <div className="col-span-1">
                                                             {
@@ -158,14 +188,15 @@ const SearchFlightsRes = () => {
                                                             }
                                                         </div>
                                                         <div className="col-span-1">
-                                                          {
-                                                            Object.values(multies)[routeid].map((flight) => (
-                                                                <>
-                                                                                    <SingleFlightResBox name="onwards" handlepid={setPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
 
-                                                                </>
-                                                            ))
-                                                          }
+                                                            {
+                                                                (trip == 3 && Object.values(multies).length > 0) && Object.values(multies)[routeid].map((flight) => (
+                                                                    <>
+                                                                        <SingleFlightResBox name={'multi'}  handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
+
+                                                                    </>
+                                                                ))
+                                                            }
                                                         </div>
 
                                                     </div>

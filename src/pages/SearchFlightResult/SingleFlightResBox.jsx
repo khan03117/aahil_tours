@@ -68,13 +68,13 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
         setFairRule(item.data);
     }
 
-    useEffect(() => {
-        setPriceIndex(0);
-        if (pricelist.length > 0) {
-            setPrice_id(pricelist[0].id)
-        }
+    // useEffect(() => {
+    //     setPriceIndex(0);
+    //     if (pricelist.length > 0) {
+    //         setPrice_id(pricelist[0].id)
+    //     }
 
-    }, []);
+    // }, []);
     useEffect(() => {
         if (price_id) {
             handlepid(price_id)
@@ -139,7 +139,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                                 <div className="block">
                                                     <div className="flex items-center">
 
-                                                        <Radio data-name={name} checked={priceindex == idx ? 'checked' : false} onClick={() => getFareRule(plist.id)} label={
+                                                        <Radio name={name} key={idx} onClick={() => getFareRule(plist.id)} label={
                                                             <>
                                                                 <p className='font-bold text-xl text-red-600'>{countPrice(plist.id)}</p>
                                                                 <div className="flex gap-2 flex-wrap items-center text-[12px]">
