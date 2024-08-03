@@ -3,11 +3,12 @@ import LabelSearch from './LabelSearch';
 import { useRef, useState } from 'react';
 import React from 'react';
 import { getData } from '../../Utils';
-const FromField = ({ label,  id, handleFdata }) => {
+import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
+const FromField = ({ label, id, handleFdata }) => {
   const [keyword, setKeyword] = React.useState('');
   const [open, setOpen] = useState(false);
   const [cities, setCities] = React.useState([]);
-  const [code, setCode] = React.useState({name : "", code : ""});
+  const [code, setCode] = React.useState({ name: "", code: "" });
   const handleOpen = () => {
     setOpen(!open);
   }
@@ -21,27 +22,20 @@ const FromField = ({ label,  id, handleFdata }) => {
       setOpen(false);
     }
   };
-  const getdata = async () =>{
-    if(keyword.length > 3){
-    const items = await getData(`search-airport?search=${keyword}&notin=XHX,MDQ,SDE`);
+  const getdata = async () => {
+    const items = await getData(`airports?key=${keyword}`);
     setCities(items.data);
-    }else{
-      setCities([])
-    }
   }
   React.useEffect(() => {
-    if(keyword){
-      getdata();
-    }
-   
+    getdata();
   }, [keyword]);
   const handleCode = (obj) => {
     setCode(obj);
     setOpen(false);
-    handleFdata(id, label,  obj.code);
+    handleFdata(id, label, obj.code);
   }
-  
-  React.useEffect(() => {    
+
+  React.useEffect(() => {
     if (ref) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
@@ -80,16 +74,29 @@ const FromField = ({ label,  id, handleFdata }) => {
                   {
                     cities.length > 0 && cities.map((cit) => (
                       <>
-                       <li>
-                    <button onClick={() => handleCode(cit)}  className="w-full text-start">
-                     {cit.code} {cit.name}
-                    </button>
-                  </li>
+                        <li className='border-b border-dashed border-blue-gray-200 last:border-b-0'>
+                          <button onClick={() => handleCode(cit)} className=" gap-2 text-xs w-full text-start">
+                            <div className="flex items-center gap-3">
+                              {
+                                label.toLowerCase() == 'from' &&  (
+                                  <span><GiAirplaneDeparture className='size-4' /></span>
+                                )
+                              }
+                              {
+                                label.toLowerCase() == 'to' &&  (
+                                    <span className="size-4"><GiAirplaneArrival/></span>
+                                )
+                              }
+                             <span> {cit.code} {cit.name}</span>
+                            </div>
+                            <p className='font-bold'>{cit.city} {cit.country}</p>
+                          </button>
+                        </li>
                       </>
                     ))
                   }
-                 
-                 
+
+
                 </ul>
               </div>
             </div>

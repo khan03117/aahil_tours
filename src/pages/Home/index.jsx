@@ -5,7 +5,7 @@ import FromField from "./FromField"
 import LabelSearch from "./LabelSearch"
 import { CloseCircleFilled, DownOutlined, PlusOutlined } from "@ant-design/icons"
 import TravellersBox from "./TravellersBox"
-import { formatDate, pfts,  trips } from '../../Utils'
+import { formatDate, pfts, trips } from '../../Utils'
 import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
@@ -38,7 +38,7 @@ const Home = () => {
     };
     const handleDecrement = (key) => {
         setTravellers((prev) => {
-            if (key === 'ADULT' && prev[key] <= 1) {              
+            if (key === 'ADULT' && prev[key] <= 1) {
                 return prev;
             }
 
@@ -59,9 +59,51 @@ const Home = () => {
     const [rows, setRows] = useState(1);
     const [fdata, setFdata] = useState([]);
     const [tbox, setTbox] = useState(false);
-   
-  
+    const [errors, setErrors] = useState([]);
 
+    const validate = () => {
+        let validationErrors = [];
+
+        // Validate fdata
+        if (!fdata || fdata.length === 0) {
+            validationErrors.push('Flight data is required.');
+        }
+
+        // Validate travellers
+        if (!travellers || !travellers.ADULT || travellers.ADULT <= 0) {
+            validationErrors.push('At least one adult passenger is required.');
+        }
+
+        // Validate cabinClass
+        if (!cabinClass) {
+            validationErrors.push('Cabin class is required.');
+        }
+
+        // Validate each trip segment
+        fdata.forEach((itm, index) => {
+            if (!itm.From) {
+                validationErrors.push(`From city/airport is required for segment ${index + 1}.`);
+            }
+            if (!itm.To) {
+                validationErrors.push(`To city/airport is required for segment ${index + 1}.`);
+            }
+            if (!itm.DepartureDate && trip !== 2) { // For one-way and multi-city, DepartureDate is required
+                validationErrors.push(`Departure date is required for segment ${index + 1}.`);
+            }
+            if (trip === 2 && !itm.ReturnDate) { // For round trip, ReturnDate is required
+                validationErrors.push(`Return date is required for segment ${index + 1}.`);
+            }
+        });
+
+        // Set errors if any validation failed
+        if (validationErrors.length > 0) {
+            setErrors(validationErrors);
+            return; // Stop execution if there are errors
+        } else {
+            return true;
+        }
+
+    }
     const handleTravellerBox = () => {
         setTbox(true);
     }
@@ -116,66 +158,68 @@ const Home = () => {
     useEffect(() => {
         console.log(fdata)
     }, [fdata]);
-    const navigate  = useNavigate();
+    const navigate = useNavigate();
     const searchFlight = async () => {
         try {
-            let routeInfos = [];
-            if (trip === 1) { // One Way
-                routeInfos = fdata.map((itm) => ({
-                    fromCityOrAirport: { code: itm.From },
-                    toCityOrAirport: { code: itm.To },
-                    travelDate: formatDate(itm.DepartureDate),
-                }));
-            } else if (trip === 2) { // Round Trip
-                routeInfos = fdata.flatMap((itm) => [
-                    {
+            if (validate()) {
+                let routeInfos = [];
+                if (trip === 1) { // One Way
+                    routeInfos = fdata.map((itm) => ({
+                        fromCityOrAirport: { code: itm.From },
+                        toCityOrAirport: { code: itm.To },
+                        travelDate: formatDate(itm?.DepartureDate ?? new Date()),
+                    }));
+                } else if (trip === 2) { // Round Trip
+                    routeInfos = fdata.flatMap((itm) => [
+                        {
+                            fromCityOrAirport: { code: itm.From },
+                            toCityOrAirport: { code: itm.To },
+                            travelDate: formatDate(itm?.DepartureDate ?? new Date()),
+                        },
+                        {
+                            fromCityOrAirport: { code: itm.To },
+                            toCityOrAirport: { code: itm.From },
+                            travelDate: formatDate(itm?.ReturnDate ?? new Date()),
+                        }
+                    ]);
+                } else if (trip === 3) { // Multi-City
+                    routeInfos = fdata.map((itm) => ({
                         fromCityOrAirport: { code: itm.From },
                         toCityOrAirport: { code: itm.To },
                         travelDate: formatDate(itm.DepartureDate),
-                    },
-                    {
-                        fromCityOrAirport: { code: itm.To },
-                        toCityOrAirport: { code: itm.From },
-                        travelDate: formatDate(itm.ReturnDate),
-                    }
-                ]);
-            } else if (trip === 3) { // Multi-City
-                routeInfos = fdata.map((itm) => ({
-                    fromCityOrAirport: { code: itm.From },
-                    toCityOrAirport: { code: itm.To },
-                    travelDate: formatDate(itm.DepartureDate),
-                }));
-            }
-
-            const searchModifiers = {};
-            if (quota) {
-                searchModifiers['pft'] = quota;
-            }
-
-            const data = {
-                searchQuery: {
-                    cabinClass: cabinClass,
-                    paxInfo: {
-                        ADULT: travellers.ADULT.toString(),
-                        CHILD: travellers.CHILD.toString(),
-                        INFANT: travellers.INFANT.toString(),
-                    },
-                    routeInfos: routeInfos,
+                    }));
                 }
-            };
 
-            if (Object.keys(searchModifiers).length > 0) {
-                data.searchQuery.searchModifiers = searchModifiers;
+                const searchModifiers = {};
+                if (quota) {
+                    searchModifiers['pft'] = quota;
+                }
+
+                const data = {
+                    searchQuery: {
+                        cabinClass: cabinClass,
+                        paxInfo: {
+                            ADULT: travellers.ADULT.toString(),
+                            CHILD: travellers.CHILD.toString(),
+                            INFANT: travellers.INFANT.toString(),
+                        },
+                        routeInfos: routeInfos,
+                    }
+                };
+
+                if (Object.keys(searchModifiers).length > 0) {
+                    data.searchQuery.searchModifiers = searchModifiers;
+                }
+
+                localStorage.setItem('search', JSON.stringify({ data: data, trip: trip }));
+
+                navigate('/search-flight')
             }
-
-            localStorage.setItem('search', JSON.stringify({data : data, trip : trip}));
-            
-            navigate('/search-flight')
         } catch (error) {
             console.log(error)
         }
     };
- 
+
     return (
         <>
             <section className="bg-primary p-10">
@@ -193,24 +237,28 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
+                    <div className="w-full text-white text-xs">
+                        { errors.length > 0 && '*'+errors[0]}
+                    </div>
                     {
                         [...Array(rows)].map((a, index) => (
                             <>
-                                <div key={a} className="grid border-b border-blue-gray-100 last:border-none grid-cols-8  *:border-e *:border-blue-gray-100">
-                                    <div className="col-span-2 rounded-s">
+                                <div key={a} className="grid mb-2 border-b border-blue-gray-100 last:border-none lg:grid-cols-8 grid-cols-3  *:border-e *:border-blue-gray-100">
+                                    <div className="lg:col-span-2 col-span-1 rounded-s">
                                         <FromField handleFdata={handleFdata} id={index} open={open} label="From" />
                                     </div>
-                                    <div className="col-span-2">
+                                    <div className="lg:col-span-2 col-span-1">
                                         <FromField handleFdata={handleFdata} id={index} open={open} label="To" />
                                     </div>
-                                    <div className="col-span-1">
+                                    <div className="lg:col-span-1 col-span-1">
                                         <DateField handleFdata={handleFdata} id={index} handletrip={handletrip} disabled={false} label={"Departure Date"} />
                                     </div>
                                     {
-                                        trip != 3 && (
+                                        trip == 2 && (
                                             <>
                                                 <div className="col-span-1">
                                                     <DateField id={index} handleFdata={handleFdata} handletrip={handletrip} label={"Return Date"} disabled={trip == 2 ? false : true} />
+                                                    
                                                 </div>
                                             </>
                                         )
@@ -218,7 +266,7 @@ const Home = () => {
                                     {
                                         index == 0 && (
                                             <>
-                                                <div className="col-span-1 border-none">
+                                                <div className="lg:col-span-1  col-span-3 border-none">
                                                     <div onClick={handleTravellerBox} className="w-full p-3 bg-white h-full relative">
                                                         <LabelSearch label={"Traveller & Class"} />
                                                         <h4>
@@ -250,10 +298,10 @@ const Home = () => {
                                         )
                                     }
 
-                                    <div className={`${trip != 3 ? 'col-span-1' : index == 0 ? 'col-span-2' : 'col-span-3'}  border-none bg-white`}>
+                                    <div className={`${trip != 3 ? 'col-span-1' : index == 0 ? 'lg:col-span-2 col-span-3' : 'lg:col-span-3 col-span-3'}  border-none bg-white`}>
                                         {
                                             index + 1 == rows ? <>
-                                                <div className={`w-full h-full ${trip != 3 ? '' : 'p-3 flex gap-2 items-center'}`}>
+                                                <div className={`w-full h-full ${trip != 3 ? '' : 'p-3 flex lg:flex-none flex-wrap gap-2 items-center'}`}>
                                                     <button onClick={searchFlight} className={`px-7 text-sm ${trip != 3 ? 'h-full w-full rounded-e' : 'py-2 rounded-full'}   bg-orange-900 text-white outline-none`}>Search</button>
                                                     <button onClick={addcity} className="text-primary px-4 py-2 text-sm border border-primary rounded-full">
                                                         <PlusOutlined /> Add City

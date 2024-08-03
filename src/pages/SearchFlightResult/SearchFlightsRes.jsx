@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import axios from "axios";
 import Filter from "./Filter"
@@ -23,6 +23,7 @@ const SearchFlightsRes = () => {
     const [isloading, setIsLoading] = React.useState(false);
     const [routeid, setRouteId] = React.useState(0);
     const [pids, setPids] = React.useState([]);
+    const [stops, setStops] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8]);
     const setAllPid = (id) => {
         const arr = [...pids];
         let check = arr.find(elm => elm == id);
@@ -30,8 +31,12 @@ const SearchFlightsRes = () => {
             arr.push(id);
             setPids(arr);
         }
+        console.log(stops);
     }
     const navigate = useNavigate();
+    const handleStops = (arr) => {
+        setStops(arr);
+    }
     const set_allow = () => {
         if (trip == 1 && pid) {
             setAllow(true);
@@ -51,6 +56,8 @@ const SearchFlightsRes = () => {
         set_allow();
     }, [pid, rpid, pids]);
 
+
+
     const searchFlight = async () => {
         setIsLoading(true)
         const resp = await axios.post(SEARCH, data, {
@@ -62,6 +69,7 @@ const SearchFlightsRes = () => {
         const { searchResult } = resp.data;
         const { tripInfos } = searchResult;
         if (trip === 1) {
+            console.log(tripInfos.ONWARD);
             setOnwards(tripInfos.ONWARD || []);
         } else if (trip === 2) {
             setOnwards(tripInfos.ONWARD || []);
@@ -83,6 +91,7 @@ const SearchFlightsRes = () => {
     React.useEffect(() => {
         console.log(multies);
     }, [multies]);
+
 
     if (!data.searchQuery.paxInfo) {
         return <div>Loading...</div>
@@ -123,23 +132,10 @@ const SearchFlightsRes = () => {
                                 <div className="container mx-auto">
                                     <div className="grid grid-cols-12 gap-3">
                                         <div className="col-span-3">
-                                            <Filter />
+                                            <Filter handleStops={handleStops} />
                                         </div>
                                         <div className="col-span-9">
                                             <div className="w-full">
-                                                <div className="grid grid-cols-6">
-                                                    {
-                                                        ["AIRLINES", "DEPARTURE", "DURATION", "ARRIVE", "PRICE"].map((itm) => (
-                                                            <>
-                                                                <div className="col-span-1">
-                                                                    <div className="w-full">
-                                                                        <p className="text-gray-500 text-sm font-bold py-3">{itm}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </>
-                                                        ))
-                                                    }
-                                                </div>
                                                 <div className="w-full">
                                                     {
                                                         pids.map(itm => (
@@ -148,51 +144,59 @@ const SearchFlightsRes = () => {
                                                             </>
                                                         ))
                                                     }
-                                                    <div className="w-full flex gap-4 items-center *:text-nowrap *:text-sm" >                                                    
-                                                    {
-                                                        [...data.searchQuery.routeInfos].map((route, index) => (
-                                                            <>
-                                                                <button className={`p-2 ${routeid == index ? 'bg-primary text-white' : 'bg-gray-300 text-black' }`} onClick={() => setRouteId(index)}>
-                                                                    {route.fromCityOrAirport.code} <ArrowRightOutlined /> {route.toCityOrAirport.code}
-                                                                </button>
-                                                            </>
-                                                        ))
-                                                    }
-                                                    
+                                                    <div className="w-full flex gap-4 items-center *:text-nowrap *:text-sm" >
+                                                        {
+                                                            [...data.searchQuery.routeInfos].map((route, index) => (
+                                                                <>
+                                                                    <button className={`p-2 ${routeid == index ? 'bg-primary text-white' : 'bg-gray-300 text-black'}`} onClick={() => setRouteId(index)}>
+                                                                        {route.fromCityOrAirport.code} <ArrowRightOutlined /> {route.toCityOrAirport.code}
+                                                                    </button>
+                                                                </>
+                                                            ))
+                                                        }
                                                     </div>
-                                                   
-                                                    <div className={`grid gap-2 ${trip == 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-                                                        <div className="col-span-1">
-                                                            {
 
-                                                                (
-                                                                    <>
+                                                    <div className={`grid gap-2 ${trip == 4 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                                                        {
+                                                            trip != 3 && routeid == 0 && (
+                                                                <div className="col-span-1">
+                                                                    {
+
+                                                                        (
+                                                                            <>
+                                                                                {
+                                                                                    onwards.filter(obj => stops.includes(obj.sI.length)).map((flight) => (
+                                                                                        <>
+                                                                                            <SingleFlightResBox name="onwards" handlepid={setPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
+                                                                                        </>
+                                                                                    ))
+                                                                                }
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                            )}
+                                                        {
+                                                            trip == 2 && routeid == 1 && (
+                                                                <>
+
+                                                                    <div className="col-span-1">
                                                                         {
-                                                                            onwards.map((flight) => (
+                                                                            returns.map((flight) => (
                                                                                 <>
-                                                                                    <SingleFlightResBox name="onwards" handlepid={setPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
+                                                                                    <SingleFlightResBox name="return" handlepid={setRpid} flight={flight} paxinfo={data.searchQuery.paxInfo} />
                                                                                 </>
                                                                             ))
                                                                         }
-                                                                    </>
-                                                                )
-                                                            }
-                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        }
                                                         <div className="col-span-1">
-                                                            {
-                                                                returns.map((flight) => (
-                                                                    <>
-                                                                        <SingleFlightResBox name="return" handlepid={setRpid} flight={flight} paxinfo={data.searchQuery.paxInfo} />
-                                                                    </>
-                                                                ))
-                                                            }
-                                                        </div>
-                                                        <div className="col-span-1">
-
                                                             {
                                                                 (trip == 3 && Object.values(multies).length > 0) && Object.values(multies)[routeid].map((flight) => (
                                                                     <>
-                                                                        <SingleFlightResBox name={'multi'}  handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
+                                                                        <SingleFlightResBox name={'multi'} handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
 
                                                                     </>
                                                                 ))

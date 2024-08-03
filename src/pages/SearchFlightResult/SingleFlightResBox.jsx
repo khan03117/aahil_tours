@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react'
 import food from '../../assets/fast-food.svg'
-import vistara from '../../assets/vistara.png'
-import seat from '../../assets/airplane-seat.svg'
 import { CloseOutlined } from '@ant-design/icons'
 import FlightDetails from './FlightDetails'
 import FareDetails from './FareDetails'
 import BaggageInformation from './BaggageInformation'
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Radio } from '@material-tailwind/react'
+import { Collapse, Radio } from '@material-tailwind/react'
 import axios from 'axios'
-import { FAIR_RULE, token } from '../../Utils'
+import { BASE_URL, FAIR_RULE, token } from '../../Utils'
 import FareRule from './FareRule'
+import { MdOutlineAirlineSeatReclineExtra } from "react-icons/md";
 
 const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
     const [view, setView] = React.useState('');
@@ -19,6 +18,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
     const [fairRule, setFairRule] = useState([]);
     const [price_id, setPrice_id] = useState('');
     const [priceindex, setPriceIndex] = useState(0);
+
     const viewDetails = (itm) => {
         setView(itm)
     }
@@ -105,7 +105,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                             <div className="col-span-1">
                                 <div className="w-full flex gap-3 items-center">
                                     <div className='icon'>
-                                        <img src={vistara} alt='image' />
+                                        <img src={BASE_URL+'logos/'+si[0].fD.aI.code +'.png'}  alt='image' />
                                     </div>
                                     <div className='text'>
                                         <p className='text-sm text-black font-light'>{si[0].fD.aI.name}</p>
@@ -133,9 +133,13 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                             </div>
                             <div className="col-span-2">
                                 <div className="w-full">
+
                                     {
-                                        pricelist.map((plist, idx) => (
+                                        pricelist.sort((a, b) => a.fd.ADULT.fC - b.fd.ADULT.fC).map((plist, idx) => (
                                             <>
+                                                <Collapse open={false}>
+                                              
+                                            
                                                 <div className="block">
                                                     <div className="flex items-center">
 
@@ -160,7 +164,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                                         } value={plist.id} />
                                                     </div>
                                                 </div>
-
+                                                </Collapse>
                                             </>
                                         ))
                                     }
@@ -172,7 +176,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                     {/* <Link to={'/review/'+price_id} className='font-bold text-sm block text-nowrap  text-white bg-orange-800 px-4 py-1 rounded-full'>BOOK NOW</Link> */}
                                     <div className="flex mt-2 gap-2">
                                         <div className='icon'>
-                                            <img src={seat} alt='image'></img>
+                                        <MdOutlineAirlineSeatReclineExtra />
                                         </div>
                                         <div className="text">
                                             <p className='text-xs text-red-500 font-bold'>{pricelist[priceindex ?? 0].fd.ADULT.sR} Seat Left</p>

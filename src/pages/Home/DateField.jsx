@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types';
 import LabelSearch from './LabelSearch';
 import { CloseOutlined } from '@ant-design/icons';
@@ -10,6 +10,12 @@ const DateField = ({ label, disabled, handletrip, handleFdata, id }) => {
     setStartDate(date);
     handleFdata(id, label.split(' ').join(''), date);
   }
+  useEffect(() => {
+    const baseDate = new Date(startDate ?? new Date());
+    const incrementedDate = new Date(baseDate);
+    incrementedDate.setDate(baseDate.getDate() + id);
+    handleFdata(id, label.split(' ').join(''), incrementedDate);
+  }, [startDate])
   return (
     <>
       <div className="w-full bg-white h-full p-3 relative">
