@@ -105,7 +105,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                             <div className="col-span-1">
                                 <div className="w-full flex gap-3 items-center">
                                     <div className='icon'>
-                                        <img src={BASE_URL+'logos/'+si[0].fD.aI.code +'.png'}  alt='image' />
+                                        <img className='size-8' src={BASE_URL+'logos/'+si[0].fD.aI.code +'.png'}  alt='image' />
                                     </div>
                                     <div className='text'>
                                         <p className='text-sm text-black font-light'>{si[0].fD.aI.name}</p>
@@ -137,7 +137,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                     {
                                         pricelist.sort((a, b) => a.fd.ADULT.fC - b.fd.ADULT.fC).map((plist, idx) => (
                                             <>
-                                                <Collapse open={false}>
+                                                <Collapse open={true}>
                                               
                                             
                                                 <div className="block">
