@@ -45,7 +45,7 @@ const Filter = ({ handleStops }) => {
                         [...fltrr].map((itm) => (
                             <>
                                 <li>
-                                    <Checkbox checked={stops.includes(itm.value)} onClick={() => addToStopFilter(itm.value)} label={itm.title} />
+                                    <Checkbox checked={stops.includes(itm.value)} value={itm.value} onClick={() => addToStopFilter(itm.value)} label={itm.title} />
                                 </li>
                             </>
                         ))

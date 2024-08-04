@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react'
 import food from '../../assets/fast-food.svg'
-import { CloseOutlined } from '@ant-design/icons'
+import { CloseOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import FlightDetails from './FlightDetails'
 import FareDetails from './FareDetails'
 import BaggageInformation from './BaggageInformation'
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, Radio } from '@material-tailwind/react'
+import { Collapse } from '@material-tailwind/react'
 import axios from 'axios'
 import { BASE_URL, FAIR_RULE, token } from '../../Utils'
 import FareRule from './FareRule'
 import { MdOutlineAirlineSeatReclineExtra } from "react-icons/md";
+import PriceBox from './PriceBox'
 
 const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
     const [view, setView] = React.useState('');
@@ -18,6 +19,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
     const [fairRule, setFairRule] = useState([]);
     const [price_id, setPrice_id] = useState('');
     const [priceindex, setPriceIndex] = useState(0);
+    const [open, setOpen] = useState(false);
 
     const viewDetails = (itm) => {
         setView(itm)
@@ -100,12 +102,12 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                     <div className="col-span-1">
                         <div className="grid grid-cols-6 relative">
                             <div className="absolute text-xs text-center top-[10%] translate-x-[-50%] left-[28%]  w-10 h-1 border-t border-blue-gray-500">
-                                {stops + 1} stops
+                                {stops} stops
                             </div>
                             <div className="col-span-1">
                                 <div className="w-full flex gap-3 items-center">
                                     <div className='icon'>
-                                        <img className='size-8' src={BASE_URL+'logos/'+si[0].fD.aI.code +'.png'}  alt='image' />
+                                        <img className='size-8' src={BASE_URL + 'logos/' + si[0].fD.aI.code + '.png'} alt='image' />
                                     </div>
                                     <div className='text'>
                                         <p className='text-sm text-black font-light'>{si[0].fD.aI.name}</p>
@@ -133,41 +135,46 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                             </div>
                             <div className="col-span-2">
                                 <div className="w-full">
-
+                                    <PriceBox plist={pricelist[0]} name={name} getFareRule={getFareRule} countPrice={countPrice} />
                                     {
-                                        pricelist.sort((a, b) => a.fd.ADULT.fC - b.fd.ADULT.fC).map((plist, idx) => (
+                                        pricelist.length > 1 && (
                                             <>
-                                                <Collapse open={true}>
-                                              
-                                            
-                                                <div className="block">
-                                                    <div className="flex items-center">
-
-                                                        <Radio name={name} key={idx} onClick={() => getFareRule(plist.id)} label={
-                                                            <>
-                                                                <p className='font-bold text-xl text-red-600'>{countPrice(plist.id)}</p>
-                                                                <div className="flex gap-2 flex-wrap items-center text-[12px]">
-                                                                    <span className="bg-yellow-200  px-1 py-[2px]">
-                                                                        {plist.fareIdentifier}
-                                                                    </span>
-                                                                    <span>
-                                                                        {plist.fd.ADULT.cc}
-                                                                    </span>
-                                                                    <span>
-                                                                        {plist.fd.ADULT.mI ? 'Free Meal' : ''}
-                                                                    </span>
-                                                                    <span>
-                                                                        {plist.fd.ADULT.rT ? 'Refundable' : 'Not Refundable'}
-                                                                    </span>
-                                                                </div>
+                                                <button onClick={() => setOpen(!open)} className="w-full flex justify-between  py-2 px-2  text-xs border-b border-gray-600 text-black"> 
+                                                   <span>
+                                                   {
+                                                        open ? <>
+                                                            Hide 
+                                                        </> : <>
+                                                        Show All 
+                                                        </>
+                                                    }
+                                                   </span>
+                                                   <span>
+                                                        {
+                                                            open ? <>
+                                                                <MinusOutlined/>
+                                                            </> : <>
+                                                                <PlusOutlined/>
                                                             </>
-                                                        } value={plist.id} />
-                                                    </div>
-                                                </div>
-                                                </Collapse>
+                                                        }
+                                                   </span>
+
+
+                                                     </button>
+
+                                                {
+                                                    pricelist.slice(1).map((plist) => (
+                                                        <>
+                                                            <Collapse open={open}>
+                                                                <PriceBox plist={plist} name={name} getFareRule={getFareRule} countPrice={countPrice} />
+                                                            </Collapse>
+                                                        </>
+                                                    ))
+                                                }
                                             </>
-                                        ))
+                                        )
                                     }
+
 
                                 </div>
                             </div>
@@ -176,10 +183,10 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                     {/* <Link to={'/review/'+price_id} className='font-bold text-sm block text-nowrap  text-white bg-orange-800 px-4 py-1 rounded-full'>BOOK NOW</Link> */}
                                     <div className="flex mt-2 gap-2">
                                         <div className='icon'>
-                                        <MdOutlineAirlineSeatReclineExtra />
+                                            <MdOutlineAirlineSeatReclineExtra />
                                         </div>
                                         <div className="text">
-                                            <p className='text-xs text-red-500 font-bold'>{pricelist[priceindex ?? 0].fd.ADULT.sR} Seat Left</p>
+                                            <p className='text-xs text-red-500 font-bold'>{pricelist[priceindex ?? 0]?.fd.ADULT.sR ?? 0} Seat Left</p>
                                         </div>
                                     </div>
                                 </div>

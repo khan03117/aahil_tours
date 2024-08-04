@@ -24,14 +24,23 @@ const SearchFlightsRes = () => {
     const [routeid, setRouteId] = React.useState(0);
     const [pids, setPids] = React.useState([]);
     const [stops, setStops] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+    const [pdarr, setPdarr] = useState([]);
+
     const setAllPid = (id) => {
-        const arr = [...pids];
-        let check = arr.find(elm => elm == id);
-        if (!check) {
-            arr.push(id);
-            setPids(arr);
+        const prr = [...pdarr];
+        const isExists = prr.find(obj => obj.rid == routeid);
+        if (isExists) {
+            const index = prr.indexOf(isExists);
+            prr[index].p_id = id;
+            setPdarr(prr);
+        } else {
+            const newobj = { rid: routeid, p_id: id };
+            prr.push(newobj);
+            setPdarr([...prr]);
         }
-        console.log(stops);
+        const arr = [...prr];
+        const filtered_pids = arr.map(obj => (obj.p_id));
+        setPids(filtered_pids);
     }
     const navigate = useNavigate();
     const handleStops = (arr) => {
@@ -137,13 +146,6 @@ const SearchFlightsRes = () => {
                                         <div className="col-span-9">
                                             <div className="w-full">
                                                 <div className="w-full">
-                                                    {
-                                                        pids.map(itm => (
-                                                            <>
-                                                                <span className='me-5'>{itm}</span>
-                                                            </>
-                                                        ))
-                                                    }
                                                     <div className="w-full flex gap-4 items-center *:text-nowrap *:text-sm" >
                                                         {
                                                             [...data.searchQuery.routeInfos].map((route, index) => (
@@ -165,7 +167,7 @@ const SearchFlightsRes = () => {
                                                                         (
                                                                             <>
                                                                                 {
-                                                                                    onwards.filter(obj => stops.includes(obj.sI.length)).map((flight) => (
+                                                                                    onwards.filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
                                                                                         <>
                                                                                             <SingleFlightResBox name="onwards" handlepid={setPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
                                                                                         </>
@@ -182,7 +184,7 @@ const SearchFlightsRes = () => {
 
                                                                     <div className="col-span-1">
                                                                         {
-                                                                            returns.map((flight) => (
+                                                                            returns.filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
                                                                                 <>
                                                                                     <SingleFlightResBox name="return" handlepid={setRpid} flight={flight} paxinfo={data.searchQuery.paxInfo} />
                                                                                 </>
@@ -194,7 +196,7 @@ const SearchFlightsRes = () => {
                                                         }
                                                         <div className="col-span-1">
                                                             {
-                                                                (trip == 3 && Object.values(multies).length > 0) && Object.values(multies)[routeid].map((flight) => (
+                                                                (trip == 3 && Object.values(multies).length > 0) && Object.values(multies)[routeid].filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
                                                                     <>
                                                                         <SingleFlightResBox name={'multi'} handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
 
