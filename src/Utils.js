@@ -29,6 +29,7 @@ export const formatDate = (date) => {
 };
 export const token = "7121041a825bdf-f95d-40a6-8663-3bd50825a0ec";
 export const BASE_URL = "http://62.72.56.154:3000/";
+// export const BASE_URL = "http://localhost:3000/";
 export const getData = async (endpoint) => {
     try {
         const response = await fetch(BASE_URL + 'api/v1/' + endpoint, {
@@ -43,6 +44,26 @@ export const getData = async (endpoint) => {
         console.log(error);
     }
 }
+export const postData = async (endPoint, data) => {
+    try {
+      const response = await fetch(BASE_URL + 'api/v1/' + endPoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data), // Include the request body
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const responseData = await response.json();
+      return responseData;
+    } catch (err) {
+      console.error('Error:', err.message);
+    }
+  };
 export const SEARCH = "https://apitest.tripjack.com/fms/v1/air-search-all";
 export const FAIR_RULE = "https://apitest.tripjack.com/fms/v2/farerule";
 export const REVIEW = "https://apitest.tripjack.com/fms/v1/review";

@@ -14,9 +14,11 @@ const SearchFlightsRes = () => {
     const [returns, setReturns] = React.useState([]);
     const [comobs, setCombos] = React.useState([]);
     const [multies, setMulties] = React.useState({});
-    const [isInternational, setInternational] = React.useState(false);
+    
+   
     const searchdata = localStorage.getItem('search');
-    const { data, trip } = JSON.parse(searchdata);
+    const { data, trip, isInt } = JSON.parse(searchdata);
+   
     const [pid, setPid] = React.useState('');
     const [rpid, setRpid] = React.useState('');
     const [allow, setAllow] = React.useState(false);
@@ -55,7 +57,7 @@ const SearchFlightsRes = () => {
                 setAllow(true);
             }
         }
-        if (trip == 3 && !isInternational) {
+        if (trip == 3 && !isInt) {
             if (data.searchQuery.routeInfos.length == pids.length) {
                 setAllow(true);
             }
@@ -83,7 +85,7 @@ const SearchFlightsRes = () => {
         } else if (trip === 2) {
             setOnwards(tripInfos.ONWARD || []);
             setReturns(tripInfos.RETURN || []);
-        } else if (trip === 3 && isInternational) {
+        } else if (trip === 3 && isInt) {
             console.log('trip 3 and internationl')
             setCombos(tripInfos.COMBO || []);
         } else if (trip === 3) {
@@ -93,13 +95,10 @@ const SearchFlightsRes = () => {
         setIsLoading(false)
     }
     React.useEffect(() => {
-        setInternational(false);
         searchFlight();
-        console.log(comobs);
-    }, [comobs]);
-    React.useEffect(() => {
-        console.log(multies);
-    }, [multies]);
+       
+    }, []);
+   
 
 
     if (!data.searchQuery.paxInfo) {
@@ -115,7 +114,7 @@ const SearchFlightsRes = () => {
 
                 navigate('/review/' + ids);
             }
-            if (trip == 3 && !isInternational) {
+            if (trip == 3 && !isInt) {
                 const allpids = pids.join(',');
                 navigate('/review/' + allpids);
             }
@@ -196,7 +195,15 @@ const SearchFlightsRes = () => {
                                                         }
                                                         <div className="col-span-1">
                                                             {
-                                                                (trip == 3 && Object.values(multies).length > 0) && Object.values(multies)[routeid].filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
+                                                                ((trip == 3 && !isInt) && Object.values(multies).length > 0) && Object.values(multies)[routeid].filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
+                                                                    <>
+                                                                        <SingleFlightResBox name={'multi'} handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
+
+                                                                    </>
+                                                                ))
+                                                            }
+                                                            {
+                                                                (trip == 3 && isInt) &&  comobs.filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
                                                                     <>
                                                                         <SingleFlightResBox name={'multi'} handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
 

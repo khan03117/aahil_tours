@@ -33,6 +33,7 @@ const FromField = ({ label, id, handleFdata }) => {
     setCode(obj);
     setOpen(false);
     handleFdata(id, label, obj.code);
+    handleFdata(id, label+'_country', obj.countrycode);
   }
 
   React.useEffect(() => {

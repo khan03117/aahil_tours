@@ -5,7 +5,7 @@ import FromField from "./FromField"
 import LabelSearch from "./LabelSearch"
 import { CloseCircleFilled, DownOutlined, PlusOutlined } from "@ant-design/icons"
 import TravellersBox from "./TravellersBox"
-import { formatDate, pfts, trips } from '../../Utils'
+import { formatDate, pfts, postData, trips } from '../../Utils'
 import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
@@ -61,7 +61,9 @@ const Home = () => {
     const [tbox, setTbox] = useState(false);
     const [errors, setErrors] = useState([]);
 
+
     const validate = () => {
+
         let validationErrors = [];
 
         // Validate fdata
@@ -125,6 +127,7 @@ const Home = () => {
         };
     }, [tbox]);
     const handleFdata = (index, key, value) => {
+
         let temp = [...fdata];
         const found = temp.find(obj => obj.id == index);
         if (found) {
@@ -162,32 +165,49 @@ const Home = () => {
     const searchFlight = async () => {
         try {
             if (validate()) {
+                let isInt = false;
                 let routeInfos = [];
+                
                 if (trip === 1) { // One Way
-                    routeInfos = fdata.map((itm) => ({
-                        fromCityOrAirport: { code: itm.From },
-                        toCityOrAirport: { code: itm.To },
-                        travelDate: formatDate(itm?.DepartureDate ?? new Date()),
-                    }));
-                } else if (trip === 2) { // Round Trip
-                    routeInfos = fdata.flatMap((itm) => [
-                        {
+                    routeInfos = fdata.map((itm) => {
+                        if (itm.From_country !== itm.To_country) {
+                            isInt = true;
+                        }
+                        return {
                             fromCityOrAirport: { code: itm.From },
                             toCityOrAirport: { code: itm.To },
                             travelDate: formatDate(itm?.DepartureDate ?? new Date()),
-                        },
-                        {
-                            fromCityOrAirport: { code: itm.To },
-                            toCityOrAirport: { code: itm.From },
-                            travelDate: formatDate(itm?.ReturnDate ?? new Date()),
+                        };
+                    });
+                } else if (trip === 2) { // Round Trip
+                    routeInfos = fdata.flatMap((itm) => {
+                        if (itm.From_country !== itm.To_country) {
+                            isInt = true;
                         }
-                    ]);
+                        return [
+                            {
+                                fromCityOrAirport: { code: itm.From },
+                                toCityOrAirport: { code: itm.To },
+                                travelDate: formatDate(itm?.DepartureDate ?? new Date()),
+                            },
+                            {
+                                fromCityOrAirport: { code: itm.To },
+                                toCityOrAirport: { code: itm.From },
+                                travelDate: formatDate(itm?.ReturnDate ?? new Date()),
+                            }
+                        ];
+                    });
                 } else if (trip === 3) { // Multi-City
-                    routeInfos = fdata.map((itm) => ({
-                        fromCityOrAirport: { code: itm.From },
-                        toCityOrAirport: { code: itm.To },
-                        travelDate: formatDate(itm.DepartureDate),
-                    }));
+                    routeInfos = fdata.map((itm) => {
+                        if (itm.From_country !== itm.To_country) {
+                            isInt = true;
+                        }
+                        return {
+                            fromCityOrAirport: { code: itm.From },
+                            toCityOrAirport: { code: itm.To },
+                            travelDate: formatDate(itm.DepartureDate),
+                        };
+                    });
                 }
 
                 const searchModifiers = {};
@@ -210,10 +230,17 @@ const Home = () => {
                 if (Object.keys(searchModifiers).length > 0) {
                     data.searchQuery.searchModifiers = searchModifiers;
                 }
+                const appid = localStorage.getItem('appId');            
+                await postData('search-query', {...data, appId : appid, is_international : isInt  }).then((resp) => {
+                    if(resp.success == "1"){
+                        localStorage.setItem('search_id', resp.data._id);
+                        localStorage.setItem('search', JSON.stringify({ data: data, trip: trip, isInt : isInt }));
+                        navigate('/search-flight')
+                    }
+                 
+                })
 
-                localStorage.setItem('search', JSON.stringify({ data: data, trip: trip }));
-
-                navigate('/search-flight')
+             
             }
         } catch (error) {
             console.log(error)
@@ -238,7 +265,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="w-full text-white text-xs">
-                        { errors.length > 0 && '*'+errors[0]}
+                        {errors.length > 0 && '*' + errors[0]}
                     </div>
                     {
                         [...Array(rows)].map((a, index) => (
@@ -258,7 +285,7 @@ const Home = () => {
                                             <>
                                                 <div className="col-span-1">
                                                     <DateField id={index} handleFdata={handleFdata} handletrip={handletrip} label={"Return Date"} disabled={trip == 2 ? false : true} />
-                                                    
+
                                                 </div>
                                             </>
                                         )
