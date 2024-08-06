@@ -53,7 +53,14 @@ const FareRule = ({ rule = defaultRule }) => {
             <div className="mb-8">
                 <div className="mb-4">
                     <h4 className="text-sm font-semibold">General Information</h4>
-                    <p className='text-sm '><strong>Is Multi-Leg:</strong> {isML ? 'Yes' : 'No'}</p>
+                    {
+                        isML && (
+                            <>
+                               <p className='text-sm '><strong>Is Multi-Leg:</strong> {isML ? 'Yes' : 'No'}</p>
+                            </>
+                        )
+                    }
+                 
                     <p  className='text-sm'><strong>Is Hand Baggage Only:</strong> {isHB ? 'Yes' : 'No'}</p>
                     <p  className='text-sm'><strong>Refund Type:</strong> {rT}</p>
                 </div>

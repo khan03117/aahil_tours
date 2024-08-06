@@ -71,7 +71,7 @@ const FromField = ({ label, id, handleFdata }) => {
                 onClick={(e) => e.stopPropagation()}
               />
               <div className="w-full">
-                <ul className="*:p-1 *:text-sm">
+                <ul className="*:p-1 *:text-sm max-h-[250px] overflow-x-hidden overflow-y-auto">
                   {
                     cities.length > 0 && cities.map((cit) => (
                       <>

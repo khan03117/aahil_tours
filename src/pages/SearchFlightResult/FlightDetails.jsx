@@ -1,7 +1,8 @@
 import { ArrowRightOutlined } from '@ant-design/icons';
-import vistara from '../../assets/vistara.png'; // Replace with a dynamic source if needed
+// import vistara from '../../assets/vistara.png'; // Replace with a dynamic source if needed
 import alarm from '../../assets/alarm-clock.png'; // Replace with a dynamic source if needed
 import PropTypes from 'prop-types';
+import FlightInfo from './FlightInfo';
 
 const FlightDetails = ({ flights }) => {
     return (
@@ -17,15 +18,7 @@ const FlightDetails = ({ flights }) => {
                         </div>
                         <div className="grid grid-cols-4 gap-4">
                             <div className="col-span-1">
-                                <div className="w-full flex gap-3 items-center">
-                                    <div className='icon'>
-                                        <img src={vistara} alt='airline logo' />
-                                    </div>
-                                    <div className='text'>
-                                        <p className='text-sm text-black font-light'>{fD.aI.name}</p>
-                                        <p className='text-sm text-gray-400 font-light'>{fD.aI.code}-{fD.fN}</p>
-                                    </div>
-                                </div>
+                                <FlightInfo code={fD.aI.code} fN={fD.fN} name={fD.aI.name} />
                             </div>
                             <div className="col-span-1">
                                 <div className="w-full">

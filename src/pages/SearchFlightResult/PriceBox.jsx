@@ -2,13 +2,13 @@ import { Radio } from '@material-tailwind/react'
 // import React from 'react';
 import PropTypes from 'prop-types';
 
-const PriceBox = ({ name, plist, getFareRule, countPrice }) => {
+const PriceBox = ({ name, plist, getFareRule, countPrice, _pid }) => {
     return (
         <>
             <div className="block">
                 <div className="flex items-center">
 
-                    <Radio name={name} key={plist.id} onClick={() => getFareRule(plist.id)} label={
+                    <Radio checked={_pid.includes(plist.id)} name={name} key={plist.id} onClick={() => getFareRule(plist.id)} label={
                         <>
                             <p className='font-bold text-md text-red-600'>{countPrice(plist.id)}</p>
                             <div className="flex gap-2 flex-wrap items-center text-[12px]">
@@ -47,6 +47,7 @@ PriceBox.propTypes = {
     }).isRequired,
     getFareRule: PropTypes.func,
     countPrice: PropTypes.func,
+    _pid : PropTypes.array
 };
 
 export default PriceBox

@@ -1,7 +1,8 @@
 //import React from 'react'
-import vistara from '../../assets/vistara.png'
+// import vistara from '../../assets/vistara.png'
 import PropTypes from 'prop-types';
-const BaggageInformation = ({bI}) => {
+import FlightInfo from './FlightInfo';
+const BaggageInformation = ({bI, code, name, fN}) => {
     return (
         <>
             <div className="col-span-1">
@@ -17,16 +18,7 @@ const BaggageInformation = ({bI}) => {
                         <tbody>
                             <tr className='*:py-1 *:text-md'>
                                 <td className="">
-                                    <div className="w-full flex gap-3 items-center">
-                                        <div className='icon'>
-                                            <img src={vistara} alt='image' />
-                                        </div>
-                                        <div className='text'>
-                                            <p className='text-sm text-black font-light'>Vistara</p>
-                                            <p className='text-sm text-gray-400 font-light'>UK-929</p>
-                                        </div>
-
-                                    </div>
+                                <FlightInfo code={code} name={name} fN={fN} />
                                 </td>
                                 <td className="">{bI && bI.cB}</td>
                                 <td className="">{bI && bI.iB}</td>
@@ -47,7 +39,10 @@ const BaggageInformation = ({bI}) => {
 }
 BaggageInformation.propTypes = {
    
-    bI: PropTypes.object
+    bI: PropTypes.object,
+    code: PropTypes.string,
+    name : PropTypes.string,
+    fN : PropTypes.string
 }
 
 

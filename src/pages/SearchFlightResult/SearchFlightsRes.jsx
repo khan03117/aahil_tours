@@ -111,7 +111,6 @@ const SearchFlightsRes = () => {
                 if (rpid) {
                     ids = ids + ',' + rpid;
                 }
-
                 navigate('/review/' + ids);
             }
             if (trip == 3 && !isInt) {
@@ -168,7 +167,7 @@ const SearchFlightsRes = () => {
                                                                                 {
                                                                                     onwards.filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
                                                                                         <>
-                                                                                            <SingleFlightResBox name="onwards" handlepid={setPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
+                                                                                            <SingleFlightResBox _pid={[pid]} name="onwards" handlepid={setPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
                                                                                         </>
                                                                                     ))
                                                                                 }
@@ -185,7 +184,7 @@ const SearchFlightsRes = () => {
                                                                         {
                                                                             returns.filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
                                                                                 <>
-                                                                                    <SingleFlightResBox name="return" handlepid={setRpid} flight={flight} paxinfo={data.searchQuery.paxInfo} />
+                                                                                    <SingleFlightResBox _pid={[rpid]} name="return" handlepid={setRpid} flight={flight} paxinfo={data.searchQuery.paxInfo} />
                                                                                 </>
                                                                             ))
                                                                         }
@@ -197,7 +196,7 @@ const SearchFlightsRes = () => {
                                                             {
                                                                 ((trip == 3 && !isInt) && Object.values(multies).length > 0) && Object.values(multies)[routeid].filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
                                                                     <>
-                                                                        <SingleFlightResBox name={'multi'} handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
+                                                                        <SingleFlightResBox _pid={pids} name={'multi'} handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
 
                                                                     </>
                                                                 ))
@@ -205,7 +204,7 @@ const SearchFlightsRes = () => {
                                                             {
                                                                 (trip == 3 && isInt) &&  comobs.filter(obj => stops.includes(obj.sI.length - 1)).map((flight) => (
                                                                     <>
-                                                                        <SingleFlightResBox name={'multi'} handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
+                                                                        <SingleFlightResBox _pid={pids} name={'multi'} handlepid={setAllPid} paxinfo={data.searchQuery.paxInfo} flight={flight} />
 
                                                                     </>
                                                                 ))
@@ -225,6 +224,7 @@ const SearchFlightsRes = () => {
                                     <>
                                         <section className="fixed z-[109999] bottom-0 start-0 w-full bg-primary p-4">
                                             <div className="flex justify-between">
+                                                <div></div>
                                                 <button onClick={bookflight} className="bg-white text-primary px-4 py-2 rounded shadow-sm shadow-white/40">Book Now</button>
                                             </div>
                                         </section>

@@ -1,10 +1,10 @@
 import React from 'react'
 import { ArrowRightOutlined, CloseOutlined } from '@ant-design/icons';
-import vistara from '../../assets/vistara.png'; // Replace with a dynamic source if needed
 import { CiAlarmOn } from "react-icons/ci";
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import FareRuleReview from './FareRuleReview';
+import FlightInfo from '../SearchFlightResult/FlightInfo';
 
 const FlightDetailsReview = ({ flights, totalPriceList }) => {
     const [fareId, setFareId] = React.useState('')
@@ -22,15 +22,7 @@ const FlightDetailsReview = ({ flights, totalPriceList }) => {
                             </div>
                             <div className="grid grid-cols-4 gap-2 px-3">
                                 <div className="col-span-1 *:text-sm">
-                                    <div className="w-full flex gap-3 items-center">
-                                        <div className='icon'>
-                                            <img src={vistara} alt='airline logo' />
-                                        </div>
-                                        <div className='text '>
-                                            <p className='text-sm text-black font-light'>{fD.aI.name}</p>
-                                            <p className='text-sm text-gray-400 font-light'>{fD.aI.code}-{fD.fN}</p>
-                                        </div>
-                                    </div>
+                                    <FlightInfo name={fD.aI.name} code={fD.aI.code} fN={fD.fN} />
                                 </div>
                                 <div className="col-span-1">
                                     <div className="w-full">

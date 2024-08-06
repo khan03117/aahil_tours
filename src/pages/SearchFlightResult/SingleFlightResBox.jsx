@@ -8,12 +8,13 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from '@material-tailwind/react'
 import axios from 'axios'
-import { BASE_URL, FAIR_RULE, token } from '../../Utils'
+import { FAIR_RULE, token } from '../../Utils'
 import FareRule from './FareRule'
 import { MdOutlineAirlineSeatReclineExtra } from "react-icons/md";
 import PriceBox from './PriceBox'
+import FlightInfo from './FlightInfo'
 
-const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
+const SingleFlightResBox = ({ flight, paxinfo, name, handlepid, _pid }) => {
     const [view, setView] = React.useState('');
     const [show, setShow] = useState(false);
     const [fairRule, setFairRule] = useState([]);
@@ -105,16 +106,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                 {stops} stops
                             </div>
                             <div className="col-span-1">
-                                <div className="w-full flex gap-3 items-center">
-                                    <div className='icon'>
-                                        <img className='size-8' src={BASE_URL + 'logos/' + si[0].fD.aI.code + '.png'} alt='image' />
-                                    </div>
-                                    <div className='text'>
-                                        <p className='text-sm text-black font-light'>{si[0].fD.aI.name}</p>
-                                        <p className='text-sm text-gray-400 font-light'>{si[0].fD.aI.code}-{si[0].fD.fN}</p>
-                                    </div>
-
-                                </div>
+                                <FlightInfo code={si[0].fD.aI.code} name={si[0].fD.aI.name} fN={si[0].fD.fN} />
                             </div>
                             <div className="col-span-1">
                                 <div className="w-full">
@@ -135,7 +127,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                             </div>
                             <div className="col-span-2">
                                 <div className="w-full">
-                                    <PriceBox plist={pricelist[0]} name={name} getFareRule={getFareRule} countPrice={countPrice} />
+                                    <PriceBox _pid={_pid} plist={pricelist[0]} name={name} getFareRule={getFareRule} countPrice={countPrice} />
                                     {
                                         pricelist.length > 1 && (
                                             <>
@@ -166,7 +158,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                                     pricelist.slice(1).map((plist) => (
                                                         <>
                                                             <Collapse open={open}>
-                                                                <PriceBox plist={plist} name={name} getFareRule={getFareRule} countPrice={countPrice} />
+                                                                <PriceBox _pid={_pid} plist={plist} name={name} getFareRule={getFareRule} countPrice={countPrice} />
                                                             </Collapse>
                                                         </>
                                                     ))
@@ -232,10 +224,10 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid }) => {
                                                     </button>
                                                 </div>
                                             </div>
-                                            {view === "Flight Details" && <FlightDetails flights={si} />}
+                                            {view === "Flight Details" && <FlightDetails  flights={si} />}
                                             {view === "Fare Details" && <FareDetails id={price_id} pricelist={pricelist} paxinfo={paxinfo} rule={fairRule} />}
                                             {view === "Fare Rules" && fairRule && <FareRule rule={fairRule} />}
-                                            {view === "Baggage Information" && <BaggageInformation bI={pricelist.find(obj => obj.id == price_id)?.fd.ADULT.bI} />}
+                                            {view === "Baggage Information" && <BaggageInformation code={si[0].fD.aI.code} name={si[0].fD.aI.name} fN={si[0].fD.fN} bI={pricelist.find(obj => obj.id == price_id)?.fd.ADULT.bI} />}
 
                                         </div>
                                     </div>
@@ -253,7 +245,8 @@ SingleFlightResBox.propTypes = {
     flight: PropTypes.object.isRequired,
     paxinfo: PropTypes.object,
     name: PropTypes.string,
-    handlepid: PropTypes.func
+    handlepid: PropTypes.func,
+    _pid : PropTypes.array
 }
 
 
