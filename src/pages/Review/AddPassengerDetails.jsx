@@ -13,6 +13,9 @@ const AddPassengerDetails = () => {
     
     const [pinfo, setPinfo] = React.useState([]);
     const [smeals, setSmeals] = React.useState([]);
+    const [deliveryInfo, setDeliveryInfo] = React.useState({email : [], contacts : []});
+    const [gstDetails, setGstDetails] = React.useState({});
+
     const handlePinfo = (obj) => {
         setPinfo([...pinfo, obj]);
     }
@@ -23,8 +26,8 @@ const AddPassengerDetails = () => {
     const totalarray = Object.entries(totalPax).flatMap(([type, count]) =>
         Array(count).fill(type)
     );
-    // const tripInfos = reviews.tripInfos;
-    // const routeInfos = reviews.searchQuery.routeInfos;
+
+
 
     React.useEffect(() => {
         console.log([pinfo, smeals]);
@@ -105,7 +108,7 @@ const AddPassengerDetails = () => {
                                     <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
                                         <p className="text-black text-md border-b border-gray-400">Contact Details</p>
 
-                                        <DeliveryInfo />
+                                        <DeliveryInfo setDeliveryInfo={setDeliveryInfo} />
                                     </div>
                                     <div className="w-full bg-gray-100 py-2 px-2 border-2 border-gray-200 mb-4">
                                         <p className="text-black text-md border-b border-gray-400">GST Number for Bussiness Travel</p>
@@ -119,7 +122,7 @@ const AddPassengerDetails = () => {
                                         </div>
                                         <div className="w-full bg-white py-3">
                                             <p className="text-gray-400 text-sm">to claim credit of GST charged by airlines. please enter your company GST number</p>
-                                            <GstDetails />
+                                            <GstDetails setGstDetails={setGstDetails} />
                                         </div>
                                     </div>
 

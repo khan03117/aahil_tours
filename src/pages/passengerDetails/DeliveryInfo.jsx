@@ -1,7 +1,8 @@
 import React from 'react'
-import { classes } from '../../Utils'
+import { classes } from '../../Utils';
+import PropTypes from 'prop-types';
 
-const DeliveryInfo = () => {
+const DeliveryInfo = ({setDeliveryInfo}) => {
     const [email, setEmail] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [dinfo, setDinfo] = React.useState({ emails: [], contacts: [] });
@@ -21,8 +22,10 @@ const DeliveryInfo = () => {
             contacts: [phone]
         }
         setDinfo(obj);
-        console.log(dinfo);
-    }, [email, phone])
+    }, [email, phone]);
+    React.useEffect(() => {
+        setDeliveryInfo(dinfo);
+    }, [dinfo]);
     return (
         <>
             <div className="container">
@@ -40,5 +43,7 @@ const DeliveryInfo = () => {
         </>
     )
 }
-
+DeliveryInfo.propTypes = {
+    setDeliveryInfo: PropTypes.func
+}
 export default DeliveryInfo
