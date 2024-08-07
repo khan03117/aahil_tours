@@ -6,7 +6,8 @@ import ServiceSelection from "../passengerDetails/ServiceSelection";
 import AddDetails from "../passengerDetails/AddDetails";
 import DeliveryInfo from '../passengerDetails/DeliveryInfo';
 import GstDetails from '../passengerDetails/GstDetails';
-import { postData } from '../../Utils';
+import {  BOOK, token } from '../../Utils';
+import axios from 'axios';
 
 const AddPassengerDetails = () => {
     const { state } = useLocation();
@@ -16,7 +17,7 @@ const AddPassengerDetails = () => {
     console.log(tripInfos);
     const [pinfo, setPinfo] = React.useState([]);
     const [smeals, setSmeals] = React.useState([]);
-    const [deliveryInfo, setDeliveryInfo] = React.useState({ email: [], contacts: [] });
+    const [deliveryInfo, setDeliveryInfo] = React.useState({ emails: [], contacts: [] });
     const [gstDetails, setGstDetails] = React.useState({});
     const [errors, setErrors] = React.useState([]);
 
@@ -36,10 +37,10 @@ const AddPassengerDetails = () => {
         if (totalarray.length != pinfo.length) {
             err.push({ 'msg': 'Passenger info is not correct', 'path': "pinfo" });
         }
-        if (!deliveryInfo.email.length) {
+        if (!deliveryInfo?.emails.length) {
             err.push({ 'msg': 'Email is not correct', 'path': "deliveryInfo" });
         }
-        if (!deliveryInfo.contacts.length) {
+        if (!deliveryInfo?.contacts.length) {
             err.push({ 'msg': 'contacts is not correct', 'path': "deliveryInfo" });
         }
         if (err.length > 0) {
@@ -62,7 +63,13 @@ const AddPassengerDetails = () => {
                 gstInfo: gstDetails,
                 deliveryInfo: deliveryInfo
             }
-            await postData(`${URL}air/book`, bookdata).then(resp => console.log(resp))
+            await axios.post(BOOK, bookdata, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': token
+                }
+
+            }).then(resp => console.log(resp))
                 .catch(err => console.log(err));
         }
     }

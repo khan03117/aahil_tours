@@ -1,8 +1,9 @@
 import React from 'react'
 import { classes } from '../../Utils';
 import PropTypes from 'prop-types';
+import ErrorSpan from '../../layout/ErrorSpan';
 
-const DeliveryInfo = ({setDeliveryInfo}) => {
+const DeliveryInfo = ({errors, setDeliveryInfo}) => {
     const [email, setEmail] = React.useState('');
     const [phone, setPhone] = React.useState('');
     const [dinfo, setDinfo] = React.useState({ emails: [], contacts: [] });
@@ -33,10 +34,12 @@ const DeliveryInfo = ({setDeliveryInfo}) => {
                     <div className="col-span-1">
                         <label htmlFor="">Enter Email</label>
                         <input type="email" name="email" id="email" onChange={handleFdata} className={classes} />
+                        <ErrorSpan errors={errors} path='email' />
                     </div>
                     <div className="col-span-1">
                         <label htmlFor="">Enter Mobile</label>
                         <input type="tel" name="phone" id="phone" onChange={handleFdata} className={classes} />
+                        <ErrorSpan errors={errors} path='phone' />
                     </div>
                 </div>
             </div>
@@ -44,6 +47,7 @@ const DeliveryInfo = ({setDeliveryInfo}) => {
     )
 }
 DeliveryInfo.propTypes = {
-    setDeliveryInfo: PropTypes.func
+    setDeliveryInfo: PropTypes.func,
+    errors : PropTypes.array
 }
 export default DeliveryInfo
