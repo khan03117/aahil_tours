@@ -1,10 +1,33 @@
 import React, { useEffect } from 'react'
 import DatePicker from "react-datepicker";
-import { classes, formatDate, tis } from '../../Utils';
+import { classes, formatDate, getData, tis } from '../../Utils';
 import PropTypes from 'prop-types';
 import { EditOutlined } from '@ant-design/icons';
 const AddDetails = ({ onsubmit, type, show, id, conditions }) => {
     const [errors, setErrors] = React.useState([]);
+    const [countries, setCountries] = React.useState([]);
+    const [keyword, setKeyword] = React.useState('');
+    const [open, setOpen] = React.useState(false);
+    const [country, setCountry] = React.useState({});
+    const handleOpen = () => {
+        setOpen(!open);
+    }
+    const handleSetCountry = (obj) => {
+        setCountry(obj);
+        setPdata((prevData) => ({ ...prevData, ['pNat']: obj._id }));
+        handleOpen();
+    }
+    const handleCountrySearch = (e) => {
+        const val = e.target.value;
+        setKeyword(val);
+    }
+    const searchCountry = async () => {
+        const items = await getData('country?key=' + keyword);
+        setCountries(items.data);
+    }
+    useEffect(() => {
+        searchCountry();
+    }, [keyword]);
     const tarr = [
         {
             type: "ADULT",
@@ -133,12 +156,31 @@ const AddDetails = ({ onsubmit, type, show, id, conditions }) => {
                     {
                         conditions?.pcs && (
                             <>
-                                <div className="col-span-1">
+                                <div className="col-span-1 relative">
                                     <label htmlFor="pNat">Passport Nationality</label>
-                                    <select name="pNat" onChange={handleData} id="pNat" className={classes}>
-                                        <option value="">--Select---</option>
+                                    <div onClick={handleOpen} className={classes + ' cursor-pointer'}>{country?.country ?? "Select"}</div>
+                                    {
+                                        open && (
+                                            <>
+                                                <div className="absolute top-full w-full start-0 bg-white border border-blue-gray-200">
+                                                    <input type="text" placeholder='Search country' name="searchcountry" onChange={handleCountrySearch} id="searchcountry" className={classes} />
+                                                    <ul className='list-none max-h-72 overflow-y-auto overflow-x-hidden'>
+                                                        {
+                                                            countries.map((itm) => (
+                                                                <>
+                                                                    <li>
+                                                                        <button onClick={() => handleSetCountry(itm)} className='text-start w-full text-sm p-2  bg-gray-200'>{itm.country}</button>
+                                                                    </li>
+                                                                </>
+                                                            ))
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </>
+                                        )
+                                    }
 
-                                    </select>
+
                                 </div>
                                 <div className="col-span-1">
                                     <label htmlFor="pNum">Passport Number</label>
