@@ -82,6 +82,7 @@ export const SEARCH = "https://apitest.tripjack.com/fms/v1/air-search-all";
 export const FAIR_RULE = "https://apitest.tripjack.com/fms/v2/farerule";
 export const REVIEW = "https://apitest.tripjack.com/fms/v1/review";
 export const BOOK = "https://apitest.tripjack.com/oms/v1/air/book";
+export const CONFIRM_BOOK = "https://apitest.tripjack.com/oms/v1/air/confirm-book";
 export const PRICE_VALIDATE = "https://apitest.tripjack.com/oms/v1/air/fare-validate";
 export const BOOK_DETAILS = "https://apitest.tripjack.com/oms/v1/booking-details";
 export const SEAT = "https://apitest.tripjack.com/fms/v1/seat";

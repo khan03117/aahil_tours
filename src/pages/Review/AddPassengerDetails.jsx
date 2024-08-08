@@ -6,7 +6,7 @@ import ServiceSelection from "../passengerDetails/ServiceSelection";
 import AddDetails from "../passengerDetails/AddDetails";
 import DeliveryInfo from '../passengerDetails/DeliveryInfo';
 import GstDetails from '../passengerDetails/GstDetails';
-import { BASE_URL, BOOK, loadScript, postData, token } from '../../Utils';
+import { BASE_URL, BOOK, CONFIRM_BOOK, loadScript, postData, token } from '../../Utils';
 import axios from 'axios';
 import ReviewLoading from './ReviewLoading';
 
@@ -106,13 +106,9 @@ const AddPassengerDetails = () => {
             alert('Payment Verification Failed');
         }
     };
-
-
-
     const handlePinfo = (obj) => {
         setPinfo([...pinfo, obj]);
     }
-
     const totalPax = searchQuery.paxInfo;
     const conditions = reviews.conditions;
 
@@ -138,7 +134,9 @@ const AddPassengerDetails = () => {
         }
 
     }
-
+    const confirmBooking = async () => {
+        await axios.post(CONFIRM_BOOK, data);
+    }
 
     const checkout = async () => {
         if (validation()) {
