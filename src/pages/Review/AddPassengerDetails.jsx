@@ -6,7 +6,7 @@ import ServiceSelection from "../passengerDetails/ServiceSelection";
 import AddDetails from "../passengerDetails/AddDetails";
 import DeliveryInfo from '../passengerDetails/DeliveryInfo';
 import GstDetails from '../passengerDetails/GstDetails';
-import { BASE_URL, BOOK, CONFIRM_BOOK, loadScript, postData, token } from '../../Utils';
+import { BOOK, CONFIRM_BOOK, loadScript, postData, token } from '../../Utils';
 import axios from 'axios';
 import ReviewLoading from './ReviewLoading';
 
@@ -87,20 +87,14 @@ const AddPassengerDetails = () => {
 
 
     const verifyPayment = async (response) => {
-        const result = await fetch(BASE_URL + 'api/v1/verify-payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-            }),
+        const data = await postData('verify-payment', {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature
         });
+        confirmBooking();
+        if (data.status == 'success') {
 
-        const data = await result.json();
-        if (data.status === 'success') {
             alert('Payment Successful');
         } else {
             alert('Payment Verification Failed');
@@ -135,7 +129,15 @@ const AddPassengerDetails = () => {
 
     }
     const confirmBooking = async () => {
-        await axios.post(CONFIRM_BOOK, data);
+        const data = {
+            bookingId: bookingId,
+            paymentInfos: [{
+                amount: totalFareDetail.fC.TF
+            }],
+        }
+        await axios.post(CONFIRM_BOOK, data).then((resp) => {
+            console.log(resp.data);
+        })
     }
 
     const checkout = async () => {
