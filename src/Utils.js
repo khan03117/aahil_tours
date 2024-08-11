@@ -28,7 +28,7 @@ export const formatDate = (date) => {
   return d.toISOString().split('T')[0]; // This will give us YYYY-MM-DD
 };
 export const token = "7121041a825bdf-f95d-40a6-8663-3bd50825a0ec";
-export const BASE_URL = "http://62.72.56.154:3000/";
+export const BASE_URL = "https://aahiltours.in:3000/";
 // export const BASE_URL = "http://localhost:3000/";
 export const getData = async (endpoint) => {
   try {

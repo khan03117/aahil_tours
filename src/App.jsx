@@ -7,6 +7,7 @@ import SingleHotel from './hotel/SingleHotel'
 import SearchFlightsRes from './pages/SearchFlightResult/SearchFlightsRes'
 import Review from './pages/Review'
 import AddPassengerDetails from './pages/Review/AddPassengerDetails'
+import PdfViewer from './ticket/PdfViewer'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
       <Route path='/search-flight' element={<SearchFlightsRes/>}/>
       <Route path='/review/:id' element={<Review/>} />
       <Route path='passenger-details/:id' element={<AddPassengerDetails/>}/>
+      <Route path='/ticket/:id' element={<PdfViewer/>} />
       </Route>
       </>
     )
