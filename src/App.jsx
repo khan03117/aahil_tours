@@ -10,6 +10,7 @@ import AddPassengerDetails from './pages/Review/AddPassengerDetails'
 import PdfViewer from './ticket/PdfViewer'
 import AgencyLayout from './airiq/layout/AgencyLayout'
 import Login from './airiq/auth/Login'
+import SearchPage from './airiq/pages/search/SearchPage'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
         </Route>
         <Route path='' element={<AgencyLayout />}>
           <Route path='/agency/login' element={<Login />} />
+          <Route path='/agency/search' element={<SearchPage/>} />
         </Route>
       </>
     )

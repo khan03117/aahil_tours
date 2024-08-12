@@ -3,10 +3,11 @@ import { Button, Input } from "@material-tailwind/react"
 import { postData } from '../../Utils';
 
 const Login = () => {
-    const [fdata, setFdata] = React.useState({username : "", password : ""});
+    const [fdata, setFdata] = React.useState({ username: "", password: "" });
     const handleFdata = (e) => {
-        setFdata((prev) => ({...prev, 
-            [e.target.name] : e.target.value
+        setFdata((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
         }));
     }
 
@@ -14,8 +15,11 @@ const Login = () => {
         e.preventDefault();
         try {
             const item = await postData('agency/login', fdata);
-            console.log(item);
-        }catch(err){
+            const token = item.resp;
+            localStorage.setItem('agency', item.data);
+            localStorage.getItem('token', token);
+            window.location.href = '/agency/dashboard';
+        } catch (err) {
             console.log(err);
         }
     }

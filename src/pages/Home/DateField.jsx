@@ -30,7 +30,7 @@ const DateField = ({ label, disabled, handletrip, handleFdata, id }) => {
               </>
             )
           }
-          <DatePicker minDate={new Date()}  className='w-full z-40 date-input  top-0 p-2  start-0 h-full' selected={startDate} monthsShown={2} onChange={(date) => handleDate(date)} />
+          <DatePicker  minDate={new Date()}  className='w-full z-40 date-input  top-0 p-2  start-0 h-full' selected={startDate} monthsShown={2} onChange={(date) => handleDate(date)} />
           {/* <input type="date" disabled={disabled} onChange={(e) => handleFdata(id, label, e.target.value)} className="w-full z-40 date-input absolute top-0 p-2 outline-none start-0 h-full bg-transparent" /> */}
         </div>
       </div>
