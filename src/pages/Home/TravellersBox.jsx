@@ -36,13 +36,19 @@ const TravellersBox = ({ travellers, handleIncrement, handleDecrement, handleCab
           </div>
         </div>
       ))}
-      <ul className="list-none ps-0">
-        {cabinclasses.map((itm) => (
-          <li className="text-sm" key={itm.key}>
-            <Radio name="cabinClass" color="blue" checked={c_bin == itm.key} onChange={() => handleCabinClass(itm.key)} label={itm.title} />
-          </li>
-        ))}
-      </ul>    
+      {
+        c_bin && handleCabinClass && (
+          <>
+            <ul className="list-none ps-0">
+              {cabinclasses.map((itm) => (
+                <li className="text-sm" key={itm.key}>
+                  <Radio name="cabinClass" color="blue" checked={c_bin == itm.key} onChange={() => handleCabinClass(itm.key)} label={itm.title} />
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
     </div>
   );
 };

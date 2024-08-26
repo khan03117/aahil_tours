@@ -285,7 +285,6 @@ const Home = () => {
                                             <>
                                                 <div className="col-span-1">
                                                     <DateField id={index} handleFdata={handleFdata} handletrip={handletrip} label={"Return Date"} disabled={trip == 2 ? false : true} />
-
                                                 </div>
                                             </>
                                         )
@@ -352,7 +351,6 @@ const Home = () => {
                         ))
                     }
                     <div className="grid grid-cols-1">
-
                         <div className="col-span-1">
                             <div className="w-full flex flex-wrap gap-4 mt-5">
                                 {

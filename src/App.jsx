@@ -11,6 +11,8 @@ import PdfViewer from './ticket/PdfViewer'
 import AgencyLayout from './airiq/layout/AgencyLayout'
 import Login from './airiq/auth/Login'
 import SearchPage from './airiq/pages/search/SearchPage'
+import SearchResult from './airiq/pages/search/SearchResult'
+import AgengyAuthLayout from './airiq/layout/AgengyAuthLayout'
 
 function App() {
 
@@ -26,9 +28,12 @@ function App() {
           <Route path='passenger-details/:id' element={<AddPassengerDetails />} />
           <Route path='/ticket/:id' element={<PdfViewer />} />
         </Route>
-        <Route path='' element={<AgencyLayout />}>
-          <Route path='/agency/login' element={<Login />} />
+        <Route path='' element={<AgengyAuthLayout/>}>
+            <Route path='/agency/login' element={<Login />} />
+        </Route>
+        <Route path='' element={<AgencyLayout />}>        
           <Route path='/agency/search' element={<SearchPage/>} />
+          <Route path='/agency/search-result' element={<SearchResult/>} />
         </Route>
       </>
     )

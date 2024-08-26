@@ -1,3 +1,4 @@
+
 export const trips = [
   { id: 1, trip: "One Way" },
   { id: 2, trip: "Round Trip" },
@@ -28,8 +29,10 @@ export const formatDate = (date) => {
   return d.toISOString().split('T')[0]; // This will give us YYYY-MM-DD
 };
 export const token = "7121041a825bdf-f95d-40a6-8663-3bd50825a0ec";
-export const BASE_URL = "https://aahiltours.in:3000/";
-// export const BASE_URL = "https://localhost:3000/";
+// export const BASE_URL = "https://aahiltours.in:3000/";
+export const BASE_URL = "http://localhost:5010/";
+export const AIRIQ = "https://omairiq.azurewebsites.net/";
+export const AIRIQKEY = "NTMzNDUwMDpBSVJJUSBURVNUIEFQSToxODkxOTMwMDM1OTk2OlFRYjhLVjNFMW9UV05RY1NWL0Vtcm9UYXFKTSs5dkZvaHo0RzM4WWhwTDhsamNqR3pPN1dJSHhVQ2pCSzNRcW0="
 export const getData = async (endpoint) => {
   try {
     const response = await fetch(BASE_URL + 'api/v1/' + endpoint, {
