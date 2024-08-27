@@ -13,6 +13,7 @@ import Login from './airiq/auth/Login'
 import SearchPage from './airiq/pages/search/SearchPage'
 import SearchResult from './airiq/pages/search/SearchResult'
 import AgengyAuthLayout from './airiq/layout/AgengyAuthLayout'
+import Dashboard from './airiq/pages/dashboard'
 
 function App() {
 
@@ -31,7 +32,8 @@ function App() {
         <Route path='' element={<AgengyAuthLayout/>}>
             <Route path='/agency/login' element={<Login />} />
         </Route>
-        <Route path='' element={<AgencyLayout />}>        
+        <Route path='' element={<AgencyLayout />}>  
+          <Route path='/dashboard' element={<Dashboard/>} />      
           <Route path='/agency/search' element={<SearchPage/>} />
           <Route path='/agency/search-result' element={<SearchResult/>} />
         </Route>

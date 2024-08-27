@@ -38,3 +38,27 @@ input[type="date"]::placeholder {
    display: block;
    margin-bottom: 0.3rem;
 }
+.fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active {
+  background-color: #2f81ed;
+  border-color: #2f81ed;
+  color: #fff;
+}
+.fc .fc-button-primary {
+  background-color: #2f81ed;
+  border-color: #2f81ed;
+  color: #fff;
+
+}
+.fc .fc-toolbar-title{
+  color: #2f81ed;
+}
+.fc-col-header-cell{
+  background-color: #2f81ed;
+  color: #fff;
+}
+.fc-theme-standard td, .fc-theme-standard th{
+  border-color: #2f81ed !important;
+}
+.fc .fc-daygrid-day.fc-day-today{
+  background-color: #2f81ed25;
+}
