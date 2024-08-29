@@ -63,7 +63,7 @@ const Home = () => {
 
 
     const validate = () => {
-
+        console.log(fdata);
         let validationErrors = [];
 
         // Validate fdata
@@ -144,9 +144,13 @@ const Home = () => {
     const handletrip = (itm) => {
         setTrip(itm)
         if (itm == 3) {
-            setRows((prev) => (prev > 2 ? prev : 2));
+            setRows(() => (fdata.length > 1 ? fdata.length : 2));
         } else {
             setRows(1);
+            if(fdata.length > 1){
+                const arr =  fdata[0];
+                setFdata([arr]);
+            }
         }
     }
 
@@ -270,7 +274,7 @@ const Home = () => {
                     {
                         [...Array(rows)].map((a, index) => (
                             <>
-                                <div key={a} className="grid mb-2 border-b border-blue-gray-100 last:border-none lg:grid-cols-8 grid-cols-3  *:border-e *:border-blue-gray-100">
+                                <div key={a} className="grid mb-2 last:border-none lg:grid-cols-8 grid-cols-3  *:border-e *:border-blue-gray-100">
                                     <div className="lg:col-span-2 col-span-1 rounded-s">
                                         <FromField handleFdata={handleFdata} id={index} open={open} label="From" />
                                     </div>

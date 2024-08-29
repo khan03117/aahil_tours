@@ -92,4 +92,5 @@ export const SEAT = "https://apitest.tripjack.com/fms/v1/seat";
 export const USER_DETAILS = "https://apitest.tripjack.com/ums/v1/user-detail";
 export const classes = "w-full border-b border-blue-gray-400 outline-none text-sm p-2 text-gray-600";
 export const tis = ['Mr', 'Master', 'Ms'];
-
+export const formcontrol = "rounded w-full text-blue-gray-900 outline-none border border-blue-gray-200 text-sm p-2";
+export const btn = "bg-primary text-xs uppercase  font-y tracking-wider shadow-sm shadow-secondary text-white px-5 rounded py-3";

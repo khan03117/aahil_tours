@@ -8,7 +8,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from '@material-tailwind/react'
 import axios from 'axios'
-import { FAIR_RULE, token } from '../../Utils'
+import { BASE_URL, FAIR_RULE, token } from '../../Utils'
 import FareRule from './FareRule'
 import { MdOutlineAirlineSeatReclineExtra } from "react-icons/md";
 import PriceBox from './PriceBox'
@@ -21,7 +21,20 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid, _pid }) => {
     const [price_id, setPrice_id] = useState('');
     const [priceindex, setPriceIndex] = useState(0);
     const [open, setOpen] = useState(false);
-
+    const [commission, setCommission] = React.useState('');
+    const getMyCommission = async () => {
+        const agency = localStorage.getItem('agency');
+        if (agency) {
+            const item = await axios.get(BASE_URL + 'api/v1/pricelist', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('agency')}`
+                }
+            });
+            setCommission(item.data.data);
+        }else{
+            setCommission({adult : 200, child : 100, infant : 50});
+        }
+    }
     const viewDetails = (itm) => {
         setView(itm)
     }
@@ -38,9 +51,9 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid, _pid }) => {
         let price = 0;
         const arr = pricelist.find(obj => obj.id == id);
         if (arr) {
-            const adult_price = arr.fd.ADULT.fC.TF;
-            const child_price = arr.fd?.CHILD?.fC.TF ?? 0;
-            const infant_price = arr.fd?.INFANT?.fC.TF ?? 0;
+            const adult_price = arr.fd.ADULT.fC.TF + commission.adult;
+            const child_price = arr.fd?.CHILD?.fC.TF ?? 0 + commission.child;
+            const infant_price = arr.fd?.INFANT?.fC.TF ?? 0 + commission.infant;
             const adultcount = paxinfo.ADULT;
             const childcount = paxinfo.CHILD;
             const infantcount = paxinfo.INFANT;
@@ -71,17 +84,12 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid, _pid }) => {
         setFairRule(item.data);
     }
 
-    // useEffect(() => {
-    //     setPriceIndex(0);
-    //     if (pricelist.length > 0) {
-    //         setPrice_id(pricelist[0].id)
-    //     }
 
-    // }, []);
     useEffect(() => {
         if (price_id) {
             handlepid(price_id)
         }
+        getMyCommission();
     }, [price_id]);
 
 
@@ -131,28 +139,28 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid, _pid }) => {
                                     {
                                         pricelist.length > 1 && (
                                             <>
-                                                <button onClick={() => setOpen(!open)} className="w-full flex justify-between  py-2 px-2  text-xs border-b border-gray-600 text-black"> 
-                                                   <span>
-                                                   {
-                                                        open ? <>
-                                                            Hide 
-                                                        </> : <>
-                                                        Show All 
-                                                        </>
-                                                    }
-                                                   </span>
-                                                   <span>
+                                                <button onClick={() => setOpen(!open)} className="w-full flex justify-between  py-2 px-2  text-xs border-b border-gray-600 text-black">
+                                                    <span>
                                                         {
                                                             open ? <>
-                                                                <MinusOutlined/>
+                                                                Hide
                                                             </> : <>
-                                                                <PlusOutlined/>
+                                                                Show All
                                                             </>
                                                         }
-                                                   </span>
+                                                    </span>
+                                                    <span>
+                                                        {
+                                                            open ? <>
+                                                                <MinusOutlined />
+                                                            </> : <>
+                                                                <PlusOutlined />
+                                                            </>
+                                                        }
+                                                    </span>
 
 
-                                                     </button>
+                                                </button>
 
                                                 {
                                                     pricelist.slice(1).map((plist) => (
@@ -224,7 +232,7 @@ const SingleFlightResBox = ({ flight, paxinfo, name, handlepid, _pid }) => {
                                                     </button>
                                                 </div>
                                             </div>
-                                            {view === "Flight Details" && <FlightDetails  flights={si} />}
+                                            {view === "Flight Details" && <FlightDetails flights={si} />}
                                             {view === "Fare Details" && <FareDetails id={price_id} pricelist={pricelist} paxinfo={paxinfo} rule={fairRule} />}
                                             {view === "Fare Rules" && fairRule && <FareRule rule={fairRule} />}
                                             {view === "Baggage Information" && <BaggageInformation code={si[0].fD.aI.code} name={si[0].fD.aI.name} fN={si[0].fD.fN} bI={pricelist.find(obj => obj.id == price_id)?.fd.ADULT.bI} />}
@@ -246,7 +254,7 @@ SingleFlightResBox.propTypes = {
     paxinfo: PropTypes.object,
     name: PropTypes.string,
     handlepid: PropTypes.func,
-    _pid : PropTypes.array
+    _pid: PropTypes.array
 }
 
 

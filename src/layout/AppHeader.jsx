@@ -3,6 +3,7 @@ import { MenuOutlined, UserOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 
 const AppHeader = () => {
+    const token = localStorage.getItem('agency');
     const navlist = (
         <>
             <div className="md:inline-flex hidden ms-auto items-center gap-3">
@@ -20,9 +21,22 @@ const AppHeader = () => {
                 </ul>
             </div>
             <ul className="md:inline-flex hidden ms-auto">
-                <li className="text-sm font-light text-gray-800 hover:text-primary transition duration">
-                    <Link to={'/agency/login'} className='block px-4 py-2 rounded bg-primary text-white'> <UserOutlined /> Agency Login</Link>
-                </li>
+                {
+                    token ? (
+                        <>
+                            <li className="text-sm font-light text-gray-800 hover:text-primary transition duration">
+                                <Link to={'/dashboard'} className='block px-4 py-2 rounded bg-primary text-white'> <UserOutlined />Dashboard</Link>
+                            </li>
+                        </>
+                    ) : (
+                        <>
+                            <li className="text-sm font-light text-gray-800 hover:text-primary transition duration">
+                                <Link to={'/agency/login'} className='block px-4 py-2 rounded bg-primary text-white'> <UserOutlined /> Agency Login</Link>
+                            </li>
+                        </>
+                    )
+                }
+
             </ul>
         </>
     );

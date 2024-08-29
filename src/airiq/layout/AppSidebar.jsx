@@ -1,11 +1,15 @@
 // import React from 'react'
-import { CreditCardOutlined, HomeOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { CreditCardOutlined, HomeOutlined,  LogoutOutlined,  SettingOutlined } from '@ant-design/icons';
 import AppLink from './AppLink'
 import { MdBookOnline } from 'react-icons/md';
 import { GrOfflineStorage } from 'react-icons/gr';
 import { RiFlightTakeoffFill } from 'react-icons/ri';
 
 const AppSidebar = () => {
+  const logout = () => {
+    localStorage.clear();
+    window.location.reload();
+  }
   const links = [
     {
       title: "Dashboard",
@@ -14,7 +18,7 @@ const AppSidebar = () => {
     },
     {
       title: "Book Ticket Current",
-      to: "/online-booking",
+      to: "/",
       icon : <MdBookOnline/>
     },
     {
@@ -36,11 +40,6 @@ const AppSidebar = () => {
       title: "Settings",
       to: "/settings",
       icon : <SettingOutlined/>
-    },
-    {
-      title : "Logout",
-      to : "/logout",
-      icon : <LogoutOutlined/>
     }
   ];
   return (
@@ -56,6 +55,11 @@ const AppSidebar = () => {
               </>
             ))
           }
+          <li>
+            <button onClick={logout} className="w-full text-start ">
+              <LogoutOutlined/> Logout
+            </button>
+          </li>
 
         </ul>
       </div>

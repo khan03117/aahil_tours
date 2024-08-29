@@ -10,9 +10,9 @@ const SearchResult = () => {
     const getFlights = async () => {
 
         const data = JSON.stringify({
-            "origin": "BOM",
-            "destination": "DEL",
-            "departure_date": "2024/09/15",
+            "origin": "DEL",
+            "destination": "DXB",
+            "departure_date": "2024/10/15",
             "adult": 1,
             "child": 1,
             "infant": 0
