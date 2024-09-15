@@ -1,12 +1,12 @@
 import axios from 'axios';
 import React from 'react'
 import { useLocation } from 'react-router-dom'
-import { AIRIQ, AIRIQKEY } from '../../../Utils';
+
 
 const SearchResult = () => {
     const { state } = useLocation();
     console.log(state);
-    const token = localStorage.getItem('token');
+  
     const getFlights = async () => {
 
         const data = JSON.stringify({

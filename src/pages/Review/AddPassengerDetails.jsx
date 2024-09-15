@@ -28,14 +28,12 @@ const AddPassengerDetails = () => {
 
     useEffect(() => {
         const scriptSrc = 'https://checkout.razorpay.com/v1/checkout.js';
-
         const loadRazorpayScript = async () => {
             const isScriptLoaded = await loadScript(scriptSrc);
             if (!isScriptLoaded) {
                 alert('Razorpay SDK failed to load. Are you online?');
             }
         };
-
         loadRazorpayScript();
 
         return () => {
@@ -50,7 +48,6 @@ const AddPassengerDetails = () => {
     const handlePayment = async () => {
         const respn = await postData('create-order', { amount: 50000, currency: 'INR', receipt_id: search_id });
         const order = respn.data;
-
         const options = {
             key: 'rzp_test_M50BQD07zw9WrY', // Enter the Key ID generated from the Dashboard
             amount: order.amount, // Amount is in currency subunits (paise for INR)
@@ -161,7 +158,12 @@ const AddPassengerDetails = () => {
             }).then(resp => {
                 console.log(resp);
 
-                postData('save-booking', { ...bookdata, search_id: search_id, appId: appId }).then(resp => {
+                postData('booking', { ...bookdata, travel_id: search_id, appId: appId }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }).then(resp => {
                     if (resp.success) {
                         setLoading(false);
                         handlePayment();

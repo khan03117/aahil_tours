@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react'
-import { REVIEW, token } from '../../Utils';
+import { BASE_URL, REVIEW, token } from '../../Utils';
 import { Link, useParams } from 'react-router-dom';
 import defaultreview from './review.json';
 import FareDetailsTable from './FareDetailsTable';
@@ -14,9 +14,26 @@ const Review = () => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
     const allids = id.split(',');
+    const save_price_id = async () => {
+        await axios.post(BASE_URL + "api/v1/price-id", {travel_id : localStorage.getItem('search_id'),  "priceIds": allids }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept' : 'application/json'
+            }
+        })
+    }
+    const save_review = async () => {
+        await axios.post(BASE_URL + "api/v1/review", {travel_id : localStorage.getItem('search_id'),  "review": reviews }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept' : 'application/json'
+            }
+        })
+
+    }
+    
     const validateSearch = async () => {
         try {
-
             setLoading(true)
             const data = {
                 "priceIds": allids
@@ -27,11 +44,12 @@ const Review = () => {
                     'apikey': token
                 },
             });
-            if(resp.status != 400){
+            if (resp.status != 400) {
                 console.log(resp)
                 setReview(resp.data);
-                setLoading(false);
-            }else{
+                setLoading(false);             
+               
+            } else {
                 setError('Request flight is not longer available.Please try different flight')
             }
         } catch (err) {
@@ -44,7 +62,12 @@ const Review = () => {
     // const totalcount = Object.values(reviews.searchQuery.paxInfo).reduce((total, count) => total + count, 0);
     React.useEffect(() => {
         validateSearch();
+        save_price_id();
+      
     }, []);
+    React.useEffect(() => {
+        save_review();
+    }, [reviews]);
     const conditions = reviews.conditions;
     return (
         <>

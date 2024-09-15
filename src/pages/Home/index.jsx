@@ -127,7 +127,6 @@ const Home = () => {
         };
     }, [tbox]);
     const handleFdata = (index, key, value) => {
-
         let temp = [...fdata];
         const found = temp.find(obj => obj.id == index);
         if (found) {
@@ -237,7 +236,7 @@ const Home = () => {
                 const appid = localStorage.getItem('appId');            
                 await postData('search-query', {...data, appId : appid, is_international : isInt  }).then((resp) => {
                     if(resp.success == "1"){
-                        localStorage.setItem('search_id', resp.data._id);
+                        localStorage.setItem('search_id', resp.data);
                         localStorage.setItem('search', JSON.stringify({ data: data, trip: trip, isInt : isInt }));
                         navigate('/search-flight')
                     }

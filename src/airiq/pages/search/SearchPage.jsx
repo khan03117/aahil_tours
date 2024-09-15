@@ -51,9 +51,7 @@ const SearchPage = () => {
     const handleIncrement = (key) => {
         setTravellers((prev) => {
             const newValue = prev[key] + 1;
-
             if (key === 'INFANT' && newValue > prev['ADULT']) {
-                // Infants cannot be more than adults
                 return prev;
             }
 
